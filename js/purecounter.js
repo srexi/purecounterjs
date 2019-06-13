@@ -71,7 +71,7 @@ let animateElements = (elements, observer = null) => {
 }
 
 let startCounter = (element, config) => {
-	let incrementsPerStep = incrementsPerStep = (config.end - config.start) / (config.duration / config.delay);
+	let incrementsPerStep = (config.end - config.start) / (config.duration / config.delay);
 	let countMode = 'inc';
 	if (config.start > config.end) {
 		countMode = 'dec';
