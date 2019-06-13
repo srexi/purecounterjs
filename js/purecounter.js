@@ -1,29 +1,29 @@
-let registerEventListeners = () => {
+function registerEventListeners() {
 	let elements = document.querySelectorAll('.purecounter');
 	let intersectionSupported = intersectionListenerSupported;
 
 	if (intersectionSupported) {
 		var intersectionObserver = new IntersectionObserver(animateElements, {
-			"root": document.querySelector('#sumtimg'),
+			"root": document.querySelector('body'),
 			"rootMargin": '20px',
 			"threshold": 0.5
 		});
 	}
 
 	for (let i = 0; i < elements.length; i++) {
-		if (!intersectionSupported && config.browsers == 'all') {
+		if (!intersectionSupported && config.legacy == true) {
 			if (isSafariBrowser()) {
-				window.onscroll(e => {
-					if (elementIsInView(elements[i])) {
-						animateElements([elements[i]]);
-					}
-				});
-			} else {
-				window.addEventListener('scroll', e => {
+				window.onscroll(function (e) {
 					if (elementIsInView(elements[i])) {
 						animateElements([elements[i]]);
 					}
 				}, { passive: true });
+			} else {
+				window.addEventListener('scroll', function (e) {
+					if (elementIsInView(elements[i])) {
+						animateElements([elements[i]]);
+					}
+				});
 			}
 		} else if (intersectionSupported) {
 			intersectionObserver.observe(elements[i]);
@@ -31,8 +31,8 @@ let registerEventListeners = () => {
 	}
 }
 
-let animateElements = (elements, observer = null) => {
-	elements.forEach(element => {
+function animateElements(elements, observer = null) {
+	elements.forEach(function (element) {
 		if (typeof element.target !== "undefined") {
 			var elementConfig = parseConfig(element.target);
 		} else {
@@ -40,28 +40,25 @@ let animateElements = (elements, observer = null) => {
 		}
 
 		if (elementConfig.duration <= 0) {
+			element.innerHTML = elementConfig.end;
 			return;
 		}
 
 		if (observer === null) {
 			if (!elementIsInView(element) && elementConfig.once != true) {
-				element.target.innerHTML = elementConfig.start > elementConfig.end
-					? elementConfig.end
-					: elementConfig.start;
+				element.target.innerHTML = elementConfig.start > elementConfig.end ? elementConfig.end : elementConfig.start;
 			}
 
 			return;
 		} else if (element.intersectionRatio < 0.5) {
 			if (elementConfig.once != true) {
-				element.target.innerHTML = elementConfig.start > elementConfig.end
-					? elementConfig.end
-					: elementConfig.start;
+				element.target.innerHTML = elementConfig.start > elementConfig.end ? elementConfig.end : elementConfig.start;
 			}
 
 			return;
 		}
 
-		setTimeout(() => {
+		setTimeout(function () {
 			if (typeof element.target !== "undefined") {
 				return startCounter(element.target, elementConfig);
 			}
@@ -70,7 +67,7 @@ let animateElements = (elements, observer = null) => {
 	});
 }
 
-let startCounter = (element, config) => {
+function startCounter(element, config) {
 	let incrementsPerStep = (config.end - config.start) / (config.duration / config.delay);
 	let countMode = 'inc';
 	if (config.start > config.end) {
@@ -82,22 +79,19 @@ let startCounter = (element, config) => {
 		incrementsPerStep = 1;
 	}
 
-	let currentCount = config.decimals <= 0
-		? parseInt(config.start)
-		: parseFloat(config.start).toFixed(config.decimals);
+	let currentCount = config.decimals <= 0 ? parseInt(config.start) : parseFloat(config.start).toFixed(config.decimals);
 
 	element.innerHTML = currentCount;
 	if (config.once === true) {
 		element.setAttribute('data-purecounter-duration', 0);
 	}
 
-	let counterWorker = setInterval(() => {
+	let counterWorker = setInterval(function () {
 		let nextNum = nextNumber(currentCount, incrementsPerStep, config, countMode);
 		element.innerHTML = formatNumber(nextNum, config);
 		currentCount = nextNum;
 
-		if ((currentCount >= config.end && countMode == 'inc')
-			|| (currentCount <= config.end && countMode == 'dec')) {
+		if ((currentCount >= config.end && countMode == 'inc') || (currentCount <= config.end && countMode == 'dec')) {
 			clearInterval(counterWorker);
 
 			if (currentCount != config.end) {
@@ -109,30 +103,32 @@ let startCounter = (element, config) => {
 	}, config.delay);
 }
 
-let parseConfig = element => {
-	let configValues = [].filter.call(element.attributes, attribute => {
+function parseConfig(element) {
+	let configValues = [].filter.call(element.attributes, function (attribute) {
 		return /^data-purecounter-/.test(attribute.name);
 	});
 
 	let newConfig = {
 		start: 0,
 		end: 9001,
-		duration: 300,
+		duration: 2000,
 		delay: 10,
 		once: true,
 		decimals: 0,
-		browsers: 'all',
+		legacy: true,
 	};
 
 	for (let i = 0; i < configValues.length; i++) {
 		let valueInd = configValues[i].name.replace('data-purecounter-', '');
-		newConfig[valueInd] = castDataType(configValues[i].value);
+		newConfig[valueInd.toLowerCase()] = valueInd.toLowerCase() == 'duration' ? parseInt(castDataType(configValues[i].value) * 1000) : castDataType(configValues[i].value);
 	}
+
+	console.dir(newConfig);
 
 	return newConfig;
 }
 
-let nextNumber = (number, steps, config, mode = 'inc') => {
+function nextNumber(number, steps, config, mode = 'inc') {
 	if (mode === 'inc') {
 		return config.decimals <= 0
 			? parseInt(number) + parseInt(steps)
@@ -144,13 +140,13 @@ let nextNumber = (number, steps, config, mode = 'inc') => {
 		: parseFloat(number) - parseFloat(steps);
 }
 
-let formatNumber = (number, config) => {
+function formatNumber(number, config) {
 	return config.decimals <= 0
 		? parseInt(number)
 		: number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-let castDataType = data => {
+function castDataType(data) {
 	if (/^[0-9]+\.[0-9]+$/.test(data)) {
 		return parseFloat(data);
 	}
@@ -160,7 +156,7 @@ let castDataType = data => {
 	return data;
 }
 
-let elementIsInView = element => {
+function elementIsInView(element) {
 	let top = element.offsetTop;
 	let left = element.offsetLeft;
 	let width = element.offsetWidth;
@@ -180,13 +176,13 @@ let elementIsInView = element => {
 	);
 }
 
-let intersectionListenerSupported = () => {
+function intersectionListenerSupported() {
 	return ('IntersectionObserver' in window) &&
 		('IntersectionObserverEntry' in window) &&
 		('intersectionRatio' in window.IntersectionObserverEntry.prototype);
 }
 
-let isSafariBrowser = () => {
+function isSafariBrowser() {
 	return /constructor/i.test(window.HTMLElement);
 }
 
