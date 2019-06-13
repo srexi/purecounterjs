@@ -1,6 +1,6 @@
 function registerEventListeners() {
-	const elements = document.querySelectorAll('.purecounter');
-	const intersectionSupported = intersectionListenerSupported();
+	var elements = document.querySelectorAll('.purecounter');
+	var intersectionSupported = intersectionListenerSupported();
 
 	if (intersectionSupported) {
 		var intersectionObserver = new IntersectionObserver(animateElements, {
@@ -12,14 +12,16 @@ function registerEventListeners() {
 			intersectionObserver.observe(elements[i]);
 		}
 	} else {
-		window.addEventListener('scroll', function (e) {
-			for (var i = 0; i < elements.length; i++) {
-				const config = parseConfig(elements[i]);
-				if (config.legacy === true && elementIsInView(elements[i])) {
-					animateElements([elements[i]]);
+		if (window.addEventListener) {
+			window.addEventListener('scroll', function (e) {
+				for (var i = 0; i < elements.length; i++) {
+					var config = parseConfig(elements[i]);
+					if (config.legacy === true && elementIsInView(elements[i])) {
+						animateElements([elements[i]]);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 }
 
@@ -51,7 +53,7 @@ function animateElements(elements, observer) {
 }
 
 function startCounter(element, config) {
-	const incrementsPerStep = (config.end - config.start) / (config.duration / config.delay);
+	var incrementsPerStep = (config.end - config.start) / (config.duration / config.delay);
 	var countMode = 'inc';
 	if (config.start > config.end) {
 		countMode = 'dec';
@@ -87,7 +89,7 @@ function startCounter(element, config) {
 }
 
 function parseConfig(element) {
-	const configValues = [].filter.call(element.attributes, function (attribute) {
+	var configValues = [].filter.call(element.attributes, function (attribute) {
 		return /^data-purecounter-/.test(attribute.name);
 	});
 
@@ -141,8 +143,8 @@ function castDataType(data) {
 function elementIsInView(element) {
 	var top = element.offsetTop;
 	var left = element.offsetLeft;
-	const width = element.offsetWidth;
-	const height = element.offsetHeight;
+	var width = element.offsetWidth;
+	var height = element.offsetHeight;
 
 	while (element.offsetParent) {
 		element = element.offsetParent;
@@ -162,10 +164,6 @@ function intersectionListenerSupported() {
 	return ('IntersectionObserver' in window) &&
 		('IntersectionObserverEntry' in window) &&
 		('intersectionRatio' in window.IntersectionObserverEntry.prototype);
-}
-
-function isSafariBrowser() {
-	return /constructor/i.test(window.HTMLElement);
 }
 
 (function () {
