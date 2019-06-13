@@ -30,7 +30,7 @@
   "dependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/srexi/purecounter.js.git"
+    "url": "https://github.com/srexi/purecounter.js.git"
   },
   "bugs": {
     "url": "https://github.com/srexi/purecounter.js/issues"
