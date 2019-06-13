@@ -12,6 +12,7 @@ To use it simple add the class: 'purecounter' to an element.
 ```html
 <p>I can count: <span class="purecounter"></span></p>
 ```
+Lazy Loading Is Applied Automatically
 
 You can configure it by adding a data-purecounter-* attribute, here's an example:
 ```html
@@ -39,3 +40,9 @@ once: true [boolean]
 decimals: 0 [uint]
 legacy: true [boolean]
 ```
+
+**Browser Support**
+Chrome/Edge/Opera: Yes
+Firefox: Yes
+IE: 9+
+Safari: ? (Test lowest compatibility)
