@@ -13,32 +13,33 @@ function registerEventListeners() {
 		}
 	} else {
 		if (window.addEventListener) {
+			animateLegacy(elements);
+
 			window.addEventListener('scroll', function (e) {
-				for (var i = 0; i < elements.length; i++) {
-					var config = parseConfig(elements[i]);
-					if (config.legacy === true && elementIsInView(elements[i])) {
-						animateElements([elements[i]]);
-					}
-				}
-			});
+				animateLegacy(elements);
+			}, { "passive": true });
+		}
+	}
+}
+
+function animateLegacy(elements) {
+	for (var i = 0; i < elements.length; i++) {
+		var config = parseConfig(elements[i]);
+		if (config.legacy === true && elementIsInView(elements[i])) {
+			animateElements([elements[i]]);
 		}
 	}
 }
 
 function animateElements(elements, observer) {
 	elements.forEach(function (element) {
-		if (typeof element.target !== "undefined") {
-			var elementConfig = parseConfig(element.target);
-		} else {
-			var elementConfig = parseConfig(element);
-		}
+		var elementConfig = typeof element.target !== "undefined" ? parseConfig(element.target) : parseConfig(element);
 
 		if (elementConfig.duration <= 0) {
-			element.innerHTML = elementConfig.end;
-			return;
+			return element.innerHTML = elementConfig.end.toFixed(elementConfig.decimals);
 		}
 
-		if ((!observer && !elementIsInView(element) && elementConfig.once != true) || (element.intersectionRatio < 0.5 && elementConfig.once != true)) {
+		if ((!observer && !elementIsInView(element)) || (observer && element.intersectionRatio < 0.5)) {
 			return element.target.innerHTML = elementConfig.start > elementConfig.end ? elementConfig.end : elementConfig.start;
 		}
 
