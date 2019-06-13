@@ -1,6 +1,6 @@
 function registerEventListeners() {
-	let elements = document.querySelectorAll('.purecounter');
-	let intersectionSupported = intersectionListenerSupported;
+	const elements = document.querySelectorAll('.purecounter');
+	const intersectionSupported = intersectionListenerSupported();
 
 	if (intersectionSupported) {
 		var intersectionObserver = new IntersectionObserver(animateElements, {
@@ -8,30 +8,22 @@ function registerEventListeners() {
 			"rootMargin": '20px',
 			"threshold": 0.5
 		});
-	}
-
-	for (let i = 0; i < elements.length; i++) {
-		if (!intersectionSupported && config.legacy == true) {
-			if (isSafariBrowser()) {
-				window.onscroll(function (e) {
-					if (elementIsInView(elements[i])) {
-						animateElements([elements[i]]);
-					}
-				}, { passive: true });
-			} else {
-				window.addEventListener('scroll', function (e) {
-					if (elementIsInView(elements[i])) {
-						animateElements([elements[i]]);
-					}
-				});
-			}
-		} else if (intersectionSupported) {
+		for (var i = 0; i < elements.length; i++) {
 			intersectionObserver.observe(elements[i]);
 		}
+	} else {
+		window.addEventListener('scroll', function (e) {
+			for (var i = 0; i < elements.length; i++) {
+				const config = parseConfig(elements[i]);
+				if (config.legacy === true && elementIsInView(elements[i])) {
+					animateElements([elements[i]]);
+				}
+			}
+		});
 	}
 }
 
-function animateElements(elements, observer = null) {
+function animateElements(elements, observer) {
 	elements.forEach(function (element) {
 		if (typeof element.target !== "undefined") {
 			var elementConfig = parseConfig(element.target);
@@ -44,32 +36,23 @@ function animateElements(elements, observer = null) {
 			return;
 		}
 
-		if (observer === null) {
-			if (!elementIsInView(element) && elementConfig.once != true) {
-				element.target.innerHTML = elementConfig.start > elementConfig.end ? elementConfig.end : elementConfig.start;
-			}
-
-			return;
-		} else if (element.intersectionRatio < 0.5) {
-			if (elementConfig.once != true) {
-				element.target.innerHTML = elementConfig.start > elementConfig.end ? elementConfig.end : elementConfig.start;
-			}
-
-			return;
+		if ((!observer && !elementIsInView(element) && elementConfig.once != true) || (element.intersectionRatio < 0.5 && elementConfig.once != true)) {
+			return element.target.innerHTML = elementConfig.start > elementConfig.end ? elementConfig.end : elementConfig.start;
 		}
 
 		setTimeout(function () {
 			if (typeof element.target !== "undefined") {
 				return startCounter(element.target, elementConfig);
 			}
+
 			return startCounter(element, elementConfig);
 		}, elementConfig.delay);
 	});
 }
 
 function startCounter(element, config) {
-	let incrementsPerStep = (config.end - config.start) / (config.duration / config.delay);
-	let countMode = 'inc';
+	const incrementsPerStep = (config.end - config.start) / (config.duration / config.delay);
+	var countMode = 'inc';
 	if (config.start > config.end) {
 		countMode = 'dec';
 		incrementsPerStep *= -1;
@@ -79,15 +62,15 @@ function startCounter(element, config) {
 		incrementsPerStep = 1;
 	}
 
-	let currentCount = config.decimals <= 0 ? parseInt(config.start) : parseFloat(config.start).toFixed(config.decimals);
+	var currentCount = config.decimals <= 0 ? parseInt(config.start) : parseFloat(config.start).toFixed(config.decimals);
 
 	element.innerHTML = currentCount;
 	if (config.once === true) {
 		element.setAttribute('data-purecounter-duration', 0);
 	}
 
-	let counterWorker = setInterval(function () {
-		let nextNum = nextNumber(currentCount, incrementsPerStep, config, countMode);
+	var counterWorker = setInterval(function () {
+		var nextNum = nextNumber(currentCount, incrementsPerStep, config, countMode);
 		element.innerHTML = formatNumber(nextNum, config);
 		currentCount = nextNum;
 
@@ -104,11 +87,11 @@ function startCounter(element, config) {
 }
 
 function parseConfig(element) {
-	let configValues = [].filter.call(element.attributes, function (attribute) {
+	const configValues = [].filter.call(element.attributes, function (attribute) {
 		return /^data-purecounter-/.test(attribute.name);
 	});
 
-	let newConfig = {
+	var newConfig = {
 		start: 0,
 		end: 9001,
 		duration: 2000,
@@ -118,15 +101,16 @@ function parseConfig(element) {
 		legacy: true,
 	};
 
-	for (let i = 0; i < configValues.length; i++) {
-		let valueInd = configValues[i].name.replace('data-purecounter-', '');
+	for (var i = 0; i < configValues.length; i++) {
+		var valueInd = configValues[i].name.replace('data-purecounter-', '');
 		newConfig[valueInd.toLowerCase()] = valueInd.toLowerCase() == 'duration' ? parseInt(castDataType(configValues[i].value) * 1000) : castDataType(configValues[i].value);
 	}
 
 	return newConfig;
 }
 
-function nextNumber(number, steps, config, mode = 'inc') {
+function nextNumber(number, steps, config, mode) {
+	if (!mode) mode = 'inc';
 	if (mode === 'inc') {
 		return config.decimals <= 0
 			? parseInt(number) + parseInt(steps)
@@ -155,10 +139,10 @@ function castDataType(data) {
 }
 
 function elementIsInView(element) {
-	let top = element.offsetTop;
-	let left = element.offsetLeft;
-	let width = element.offsetWidth;
-	let height = element.offsetHeight;
+	var top = element.offsetTop;
+	var left = element.offsetLeft;
+	const width = element.offsetWidth;
+	const height = element.offsetHeight;
 
 	while (element.offsetParent) {
 		element = element.offsetParent;
