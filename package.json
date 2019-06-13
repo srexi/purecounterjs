@@ -1,5 +1,5 @@
 {
-  "name": "purecounter.js",
+  "name": "@srexi/purecounter.js",
   "version": "1.0.0",
   "description": "A simple yet configurable native javascript counter which you can count on.",
   "main": "purecounter.js",
@@ -11,12 +11,29 @@
     "prod": "npm run production",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "javascript",
+    "counter",
+    "nojquery",
+    "lightweight",
+    "simple",
+    "easy",
+    "fast"
+  ],
+  "author": "Stig Rex",
   "license": "MIT",
   "devDependencies": {
     "cross-env": "^5.2.0",
     "laravel-mix": "^4.0.16",
     "vue-template-compiler": "^2.6.10"
-  }
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srexi/purecounter.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/srexi/purecounter.js/issues"
+  },
+  "homepage": "https://github.com/srexi/purecounter.js#readme"
 }
