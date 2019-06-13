@@ -42,7 +42,8 @@ legacy: true [boolean]
 ```
 
 **Browser Support**
-Chrome/Edge/Opera: Yes
-Firefox: Yes
-IE: 9+
-Safari: ? (Test lowest compatibility)
+- Chrome/Edge/Opera: Yes
+- Firefox: Yes
+- IE: 9+
+- Safari: ? (Test lowest compatibility)
+- **Other** *Make A Pull Request*
