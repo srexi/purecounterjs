@@ -11,7 +11,7 @@ let registerEventListeners = () => {
 	}
 
 	for (let i = 0; i < elements.length; i++) {
-		if (!intersectionSupported && config.browsers == 'extend') {
+		if (!intersectionSupported && config.browsers == 'all') {
 			if (isSafariBrowser()) {
 				window.onscroll(e => {
 					if (elementIsInView(elements[i])) {
@@ -115,13 +115,13 @@ let parseConfig = element => {
 	});
 
 	let newConfig = {
-		start: 100,
-		end: 0,
+		start: 0,
+		end: 9001,
 		duration: 300,
 		delay: 10,
 		once: true,
-		decimals: 2,
-		browsers: 'extend',
+		decimals: 0,
+		browsers: 'all',
 	};
 
 	for (let i = 0; i < configValues.length; i++) {
