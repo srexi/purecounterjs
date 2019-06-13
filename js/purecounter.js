@@ -4,7 +4,7 @@ function registerEventListeners() {
 
 	if (intersectionSupported) {
 		var intersectionObserver = new IntersectionObserver(animateElements, {
-			"root": document.querySelector('body'),
+			"root": null,
 			"rootMargin": '20px',
 			"threshold": 0.5
 		});
@@ -122,8 +122,6 @@ function parseConfig(element) {
 		let valueInd = configValues[i].name.replace('data-purecounter-', '');
 		newConfig[valueInd.toLowerCase()] = valueInd.toLowerCase() == 'duration' ? parseInt(castDataType(configValues[i].value) * 1000) : castDataType(configValues[i].value);
 	}
-
-	console.dir(newConfig);
 
 	return newConfig;
 }
