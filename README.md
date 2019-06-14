@@ -17,9 +17,24 @@
 npm i --save-dev @srexi/purecounter.js
 ```
 
-### Alternative
-Download the dist/purecounter.js file(for the minified version) or the js/purecounter.js file (for the prettified) version and include it right before your closing body tag:
+### CDN:
+```html
+<html>
+<head>
+    ...
+</head>
+<body>
+    ...
+
+    <script src="https://cdn.jsdelivr.net/npm/@srexi/purecounter.js/dist/purecounter.js"></script>
+</body>
+</html>
+
 ```
+
+### Self host Without NPM
+Download the dist/purecounter.js file(for the minified version) or the js/purecounter.js file (for the prettified) version and include it right before your closing body tag:
+```html
 <html>
 <head>
     ...
