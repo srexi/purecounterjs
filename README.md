@@ -34,7 +34,7 @@ Download the dist/purecounter.js file(for the minified version) or the js/pureco
 ```
 
 ## How to use it:
-To use it simple add the class: 'purecounter' to an element.
+To use it simply add the class: 'purecounter' to an element.
 ```html
 <p>I can count: <span class="purecounter"></span></p>
 ```
