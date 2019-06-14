@@ -1,4 +1,4 @@
-# A simple yet configurable native javascript counter which you can count on.
+# A simple yet configurable native javascript counter which you can __count__ on.
 
 <p align="center">
     <a href="https://www.npmjs.com/package/@srexi/purecounter.js"><img src="https://img.shields.io/npm/v/@srexi/purecounter.js.svg" alt="NPM"></a>
