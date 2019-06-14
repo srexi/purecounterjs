@@ -12,7 +12,7 @@ npm i --save-dev @srexi/purecounter.js
 ```
 
 ## Demo:
-[Demo Hosted On Github](https://srexi.github.io/purecounter.js/)
+[Proudly Hosted On Github Pages](https://srexi.github.io/purecounter.js/)
 
 ## How to use it:
 To use it simple add the class: 'purecounter' to an element.
