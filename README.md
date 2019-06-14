@@ -7,7 +7,7 @@
     <a href="https://www.npmjs.com/package/@srexi/purecounter.js"><img src="https://img.shields.io/npm/l/@srexi/purecounter.js.svg" alt="NPM"></a>
 </p>
 
-## Demo:
+## Demo
 [Proudly Hosted On Github Pages](https://srexi.github.io/purecounter.js/)
 
 ## Install
@@ -17,7 +17,7 @@
 npm i --save-dev @srexi/purecounter.js
 ```
 
-### CDN:
+### CDN
 ```html
 <html>
 <head>
@@ -88,5 +88,5 @@ legacy: true [boolean]
 - Chrome/Edge/Opera: Yes
 - Firefox: Yes
 - IE: 9+
-- Safari: 9.1.3+ - I still need to test, this is the oldest browser version I've got my hands on so far (I have not seen the point where it doesn't work yet on this browser)
+- Safari: 7.1+
 - **MISSING A BROWSER?** *Make A Pull Request*
