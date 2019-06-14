@@ -5,6 +5,7 @@
     <a href="https://www.npmjs.com/package/@srexi/purecounter.js"><img src="https://img.shields.io/npm/v/@srexi/purecounter.js.svg" alt="NPM"></a>
     <a href="https://npmcharts.com/compare/@srexi/purecounter.js?minimal=true"><img src="https://img.shields.io/npm/dt/@srexi/purecounter.js.svg" alt="NPM"></a>
     <a href="https://www.npmjs.com/package/@srexi/purecounter.js"><img src="https://img.shields.io/npm/l/@srexi/purecounter.js.svg" alt="NPM"></a>
+    <a href="https://www.browserstack.com/automate/public-build/<badge_key>"><img src='https://www.browserstack.com/automate/badge.svg?badge_key=<badge_key>'/></a>
 </p>
 
 ## Demo:
@@ -68,6 +69,7 @@ decimals: 0 [uint]
 legacy: true [boolean]
 ```
 
+![Browser Tests By Browserstack](https://github.com/srexi/purecounter.js/asset/browserstack-logo-600x315.png)
 ## Browser Support
 - Chrome/Edge/Opera: Yes
 - Firefox: Yes
