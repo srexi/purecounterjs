@@ -69,7 +69,7 @@ decimals: 0 [uint]
 legacy: true [boolean]
 ```
 
-![Browser Tests By Browserstack](https://github.com/srexi/purecounter.js/asset/browserstack-logo-600x315.png)
+![Browser Tests By Browserstack](https://github.com/srexi/purecounter.js/blob/master/asset/browserstack-logo-600x315.png)
 ## Browser Support
 - Chrome/Edge/Opera: Yes
 - Firefox: Yes
