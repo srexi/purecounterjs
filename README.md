@@ -88,5 +88,5 @@ legacy: true [boolean]
 - Chrome/Edge/Opera: Yes
 - Firefox: Yes
 - IE: 9+
-- Safari: 7.1+
+- Safari: 7+
 - **MISSING A BROWSER?** *Make A Pull Request*
