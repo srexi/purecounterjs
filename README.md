@@ -45,5 +45,5 @@ legacy: true [boolean]
 - Chrome/Edge/Opera: Yes
 - Firefox: Yes
 - IE: 9+
-- Safari: ? (Test lowest compatibility)
-- **Other** *Make A Pull Request*
+- Safari: 9.1.3+ - I still need to test, this is the oldest browser version I've got my hands on so far (I have not seen the point where it doesn't work yet on this browser)
+- **MISSING A BROWSER?** *Make A Pull Request*
