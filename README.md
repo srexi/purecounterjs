@@ -1,4 +1,4 @@
-#A simple yet configurable native javascript counter which you can count on.
+# A simple yet configurable native javascript counter which you can count on.
 
 <p align="center">
     <a href="https://www.npmjs.com/package/@srexi/purecounter.js"><img src="https://img.shields.io/npm/v/@srexi/purecounter.js.svg" alt="NPM"></a>
@@ -11,10 +11,10 @@
 npm i --save-dev @srexi/purecounter.js
 ```
 
-##Demo:
+## Demo:
 [Demo Hosted On Github](https://srexi.github.io/purecounter.js/)
 
-##How to use it:
+## How to use it:
 To use it simple add the class: 'purecounter' to an element.
 ```html
 <p>I can count: <span class="purecounter"></span></p>
@@ -48,7 +48,7 @@ decimals: 0 [uint]
 legacy: true [boolean]
 ```
 
-##Browser Support
+## Browser Support
 - Chrome/Edge/Opera: Yes
 - Firefox: Yes
 - IE: 9+
