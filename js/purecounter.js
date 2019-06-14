@@ -35,6 +35,10 @@ function animateLegacy(elements) {
 function animateElements(elements, observer) {
 	elements.forEach(function (element) {
 		var elementConfig = typeof element.target !== "undefined" ? parseConfig(element.target) : parseConfig(element);
+
+		console.log("animate");
+		console.log(elementConfig);
+
 		if (elementConfig.duration <= 0) {
 			return element.innerHTML = elementConfig.end.toFixed(elementConfig.decimals);
 		}
@@ -43,7 +47,11 @@ function animateElements(elements, observer) {
 		}
 
 		setTimeout(function () {
-			return typeof typeof element.target !== "undefined" ? startCounter(element.target, elementConfig) : startCounter(element, elementConfig);
+			if (typeof element.target !== "undefined") {
+				return startCounter(element.target, elementConfig);
+			}
+
+			return startCounter(element, elementConfig);
 		}, elementConfig.delay);
 	});
 }
@@ -118,12 +126,20 @@ function formatNumber(number, config) {
 }
 
 function castDataType(data) {
-	return /^[0-9]+\.[0-9]+$/.test(data) ? parseFloat(data) : (/^[0-9]+$/.test(data) ? parseInt(data) : data);
+	if (/^[0-9]+\.[0-9]+$/.test(data)) {
+		return parseFloat(data);
+	}
+	if (/^[0-9]+$/.test(data)) {
+		return parseInt(data);
+	}
+	return data;
 }
 
 function elementIsInView(element) {
 	var top = element.offsetTop;
 	var left = element.offsetLeft;
+	var width = element.offsetWidth;
+	var height = element.offsetHeight;
 
 	while (element.offsetParent) {
 		element = element.offsetParent;
@@ -134,8 +150,8 @@ function elementIsInView(element) {
 	return (
 		top >= window.pageYOffset &&
 		left >= window.pageXOffset &&
-		(top + element.offsetHeight) <= (window.pageYOffset + window.innerHeight) &&
-		(left + element.offsetWidth) <= (window.pageXOffset + window.innerWidth)
+		(top + height) <= (window.pageYOffset + window.innerHeight) &&
+		(left + width) <= (window.pageXOffset + window.innerWidth)
 	);
 }
 
