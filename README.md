@@ -6,13 +6,31 @@
     <a href="https://www.npmjs.com/package/@srexi/purecounter.js"><img src="https://img.shields.io/npm/l/@srexi/purecounter.js.svg" alt="NPM"></a>
 </p>
 
+## Demo:
+[Proudly Hosted On Github Pages](https://srexi.github.io/purecounter.js/)
 
+## Install
+
+### NPM
 ```
 npm i --save-dev @srexi/purecounter.js
 ```
 
-## Demo:
-[Proudly Hosted On Github Pages](https://srexi.github.io/purecounter.js/)
+### Alternative
+Download the dist/purecounter.js file(for the minified version) or the js/purecounter.js file (for the prettified) version and include it right before your closing body tag:
+```
+<html>
+<head>
+    ...
+</head>
+<body>
+    ...
+
+    <script src="js/purecounter.js"></script>
+</body>
+</html>
+
+```
 
 ## How to use it:
 To use it simple add the class: 'purecounter' to an element.
@@ -37,6 +55,7 @@ decimals - how many decimal places to show. It will automatically format the num
 legacy - Purecounter will use the very leightweight & fast intersectionListener available in most modern browsers. If this is true it will use the scroll event listener on browsers which does not support the intersection listener (RECOMMENDED: true).
 ```
 
+## Default Values:
 **If you do not override the methods default to these values:**
 ```
 start: 0 [uint]
