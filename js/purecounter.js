@@ -36,9 +36,6 @@ function animateElements(elements, observer) {
 	elements.forEach(function (element) {
 		var elementConfig = typeof element.target !== "undefined" ? parseConfig(element.target) : parseConfig(element);
 
-		console.log("animate");
-		console.log(elementConfig);
-
 		if (elementConfig.duration <= 0) {
 			return element.innerHTML = elementConfig.end.toFixed(elementConfig.decimals);
 		}
