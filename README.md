@@ -19,14 +19,14 @@ To use it simple add the class: 'purecounter' to an element.
 ```html
 <p>I can count: <span class="purecounter"></span></p>
 ```
-**Lazy Loading Is Applied Automatically**
+**Lazy Loading Is Applied Out Of The Box**
 
-You can configure it by adding a data-purecounter-* attribute, here's an example:
+**You can configure it by adding a data-purecounter-* attribute, here's an example:**
 ```html
 <p>It's over (wait for it): <span data-purecounter-start="0" data-purecounter-end="9001" class="purecounter"></span>!!!</p>
 ```
 
-Simply replace the * in "data-purecounter-*" with any of the api methods:
+**Simply replace the * in "data-purecounter-*" with any of the api methods:**
 ```
 start - The number to start from (if this is more than the end method it will automatically count down).
 end - The number to end at.
@@ -37,7 +37,7 @@ decimals - how many decimal places to show. It will automatically format the num
 legacy - Purecounter will use the very leightweight & fast intersectionListener available in most modern browsers. If this is true it will use the scroll event listener on browsers which does not support the intersection listener (RECOMMENDED: true).
 ```
 
-If you do not override the methods default to these values
+**If you do not override the methods default to these values:**
 ```
 start: 0 [uint]
 end: 9001 [uint]
