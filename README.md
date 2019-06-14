@@ -39,12 +39,12 @@ To use it simple add the class: 'purecounter' to an element.
 ```
 **Lazy Loading Is Applied Out Of The Box**
 
-**You can configure it by adding a data-purecounter-* attribute, here's an example:**
+**You can configure it by adding a data-purecounter-x attribute, here's an example:**
 ```html
-<p>It's over (wait for it): <span data-purecounter-start="0" data-purecounter-end="9001" class="purecounter"></span>!!!</p>
+<p>It's over (wait for it): <span data-purecounter-start="0" data-purecounter-end="9001" class="purecounter">0</span>!!!</p>
 ```
 
-**Simply replace the * in "data-purecounter-*" with any of the api methods:**
+**Simply replace the X in "data-purecounter-X" with any of the api methods:**
 ```
 start - The number to start from (if this is more than the end method it will automatically count down).
 end - The number to end at.
