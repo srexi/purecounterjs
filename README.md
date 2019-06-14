@@ -1,4 +1,4 @@
-***A simple yet configurable native javascript counter which you can count on.***
+#A simple yet configurable native javascript counter which you can count on.
 
 <p align="center">
     <a href="https://www.npmjs.com/package/@srexi/purecounter.js"><img src="https://img.shields.io/npm/v/@srexi/purecounter.js.svg" alt="NPM"></a>
@@ -11,22 +11,22 @@
 npm i --save-dev @srexi/purecounter.js
 ```
 
-**Demo:**
+##Demo:
 [Demo Hosted On Github](https://srexi.github.io/purecounter.js/)
 
-**How to use it:**
+##How to use it:
 To use it simple add the class: 'purecounter' to an element.
 ```html
 <p>I can count: <span class="purecounter"></span></p>
 ```
-Lazy Loading Is Applied Automatically
+**Lazy Loading Is Applied Automatically**
 
 You can configure it by adding a data-purecounter-* attribute, here's an example:
 ```html
 <p>It's over (wait for it): <span data-purecounter-start="0" data-purecounter-end="9001" class="purecounter"></span>!!!</p>
 ```
 
-Simply replace the * in data-purecounter-* with any of the api methods:
+Simply replace the * in "data-purecounter-*" with any of the api methods:
 ```
 start - The number to start from (if this is more than the end method it will automatically count down).
 end - The number to end at.
@@ -48,7 +48,7 @@ decimals: 0 [uint]
 legacy: true [boolean]
 ```
 
-**Browser Support**
+##Browser Support
 - Chrome/Edge/Opera: Yes
 - Firefox: Yes
 - IE: 9+
