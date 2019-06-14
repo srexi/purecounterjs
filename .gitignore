@@ -1,3 +1,4 @@
 /node_modules
 .eslintrc.js
 demo.html
+mix-manifest.json
