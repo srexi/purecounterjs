@@ -14,7 +14,7 @@
 
 ### NPM
 ```
-npm i --save-dev @srexi/purecounter.js
+npm i --save @srexi/purecounter.js
 ```
 
 ### CDN

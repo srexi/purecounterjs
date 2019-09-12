@@ -81,10 +81,25 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ({
+
+/***/ "./app.js":
+/*!****************!*\
+  !*** ./app.js ***!
+  \****************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _js_purecounter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./js/purecounter */ "./js/purecounter.js");
+
+var pure = new _js_purecounter__WEBPACK_IMPORTED_MODULE_0__["default"]();
+
+/***/ }),
 
 /***/ "./js/purecounter.js":
 /*!***************************!*\
@@ -302,14 +317,14 @@ function () {
 
 /***/ }),
 
-/***/ 0:
-/*!*********************************!*\
-  !*** multi ./js/purecounter.js ***!
-  \*********************************/
+/***/ 1:
+/*!**********************!*\
+  !*** multi ./app.js ***!
+  \**********************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\pureCounter\js\purecounter.js */"./js/purecounter.js");
+module.exports = __webpack_require__(/*! D:\xampp\htdocs\pureCounter\app.js */"./app.js");
 
 
 /***/ })

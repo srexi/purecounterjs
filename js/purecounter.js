@@ -8,7 +8,7 @@ export default class PureCounter {
 		var intersectionSupported = this.intersectionListenerSupported();
 
 		if (intersectionSupported) {
-			var intersectionObserver = new IntersectionObserver(animateElements, {
+			var intersectionObserver = new IntersectionObserver(this.animateElements.bind(this), {
 				"root": null,
 				"rootMargin": '20px',
 				"threshold": 0.5
@@ -21,7 +21,7 @@ export default class PureCounter {
 			if (window.addEventListener) {
 				this.animateLegacy(elements);
 
-				window.addEventListener('scroll', function (e) {
+				window.addEventListener('scroll', e => {
 					this.animateLegacy(elements);
 				}, { "passive": true });
 			}
@@ -29,6 +29,7 @@ export default class PureCounter {
 	}
 
 	animateLegacy(elements) {
+		console.log("calling animateLegacy");
 		for (var i = 0; i < elements.length; i++) {
 			var config = this.parseConfig(elements[i]);
 			if (config.legacy === true && this.elementIsInView(elements[i])) {
@@ -38,7 +39,7 @@ export default class PureCounter {
 	}
 
 	animateElements(elements, observer) {
-		elements.forEach(function (element) {
+		elements.forEach((element) => {
 			var elementConfig = typeof element.target !== "undefined" ? this.parseConfig(element.target) : this.parseConfig(element);
 
 			if (elementConfig.duration <= 0) {
@@ -48,7 +49,7 @@ export default class PureCounter {
 				return element.target.innerHTML = elementConfig.start > elementConfig.end ? elementConfig.end : elementConfig.start;
 			}
 
-			setTimeout(function () {
+			setTimeout(() => {
 				if (typeof element.target !== "undefined") {
 					return this.startCounter(element.target, elementConfig);
 				}
@@ -76,7 +77,7 @@ export default class PureCounter {
 			element.setAttribute('data-purecounter-duration', 0);
 		}
 
-		var counterWorker = setInterval(function () {
+		var counterWorker = setInterval(() => {
 			var nextNum = this.nextNumber(currentCount, incrementsPerStep, config, countMode);
 			element.innerHTML = this.formatNumber(nextNum, config);
 			currentCount = nextNum;
@@ -92,7 +93,7 @@ export default class PureCounter {
 	}
 
 	parseConfig(element) {
-		var configValues = [].filter.call(element.attributes, function (attribute) {
+		var configValues = [].filter.call(element.attributes, attribute => {
 			return /^data-purecounter-/.test(attribute.name);
 		});
 
