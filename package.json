@@ -1,6 +1,6 @@
 {
   "name": "@srexi/purecounter.js",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A simple yet configurable native javascript counter which you can count on.",
   "main": "purecounter.js",
   "scripts": {
