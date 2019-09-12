@@ -8,6 +8,5 @@ mix.webpackConfig({
         libraryTarget: 'umd',
         umdNamedDefine: true
     }
-}).js('js/purecounter.js', 'dist/')
-    .js('js/purecounter_vanilla.js', 'dist/')
-    .js('app.js', 'asset/');
+}).js('js/purecounter_vanilla.js', 'dist/')
+    .js('purecounter.js', 'dist/');
