@@ -1,4 +1,4 @@
-export default class PureCounter {
+export default class {
 	constructor() {
 		this.registerEventListeners();
 	}
