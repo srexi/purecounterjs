@@ -16,6 +16,14 @@
 ```
 npm i --save @srexi/purecounter.js
 ```
+In your app.js import and initialized the module like normal.
+```js
+import PureCounter from '@srexi/purecounter.js';
+const pure = new PureCounter;
+```
+
+### Vanilla 
+If you wish to skip the modular build and NOT use npm you can use the vanilla build like so:
 
 ### CDN
 ```html
@@ -26,14 +34,13 @@ npm i --save @srexi/purecounter.js
 <body>
     ...
 
-    <script src="https://cdn.jsdelivr.net/npm/@srexi/purecounter.js/dist/purecounter.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@srexi/purecounter.js/dist/purecounter_vanilla.js"></script>
 </body>
 </html>
-
 ```
 
-### Self host Without NPM
-Download the dist/purecounter.js file(for the minified version) or the js/purecounter.js file (for the prettified) version and include it right before your closing body tag:
+### Self hosted
+Download the dist/purecounter_vanilla.js file(for the minified version) or the js/purecounter.js file (for the prettified) version and include it right before your closing body tag:
 ```html
 <html>
 <head>
@@ -42,11 +49,11 @@ Download the dist/purecounter.js file(for the minified version) or the js/pureco
 <body>
     ...
 
-    <script src="js/purecounter.js"></script>
+    <script src="js/purecounter_vanilla.js"></script>
 </body>
 </html>
-
 ```
+Or you can take the contents of the file and paste it into your bundle.js file.
 
 ## How to use it:
 To use it simply add the class: 'purecounter' to an element.
