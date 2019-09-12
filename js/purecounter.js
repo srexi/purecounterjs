@@ -165,4 +165,4 @@ export default class PureCounter {
 	}
 }
 
-module.exports = PureCounter;
+module.exports.PureCounter = PureCounter;
