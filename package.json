@@ -1,6 +1,6 @@
 {
   "name": "@srexi/purecounter.js",
-  "version": "1.0.9",
+  "version": "1.0.91",
   "description": "A simple yet configurable native javascript counter which you can count on.",
   "main": "dist/purecounter.js",
   "module": "dist/purecounter.js",

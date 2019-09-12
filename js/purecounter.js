@@ -1,4 +1,4 @@
-export default class {
+export default class PureCounter {
 	constructor() {
 		this.registerEventListeners();
 	}
@@ -164,3 +164,5 @@ export default class {
 			('intersectionRatio' in window.IntersectionObserverEntry.prototype);
 	}
 }
+
+module.exports = PureCounter;
