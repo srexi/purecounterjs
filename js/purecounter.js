@@ -164,5 +164,3 @@ export default class PureCounter {
 			('intersectionRatio' in window.IntersectionObserverEntry.prototype);
 	}
 }
-
-module.exports.PureCounter = PureCounter;
