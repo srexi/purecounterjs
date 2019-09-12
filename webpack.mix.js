@@ -1,5 +1,13 @@
 let mix = require('laravel-mix');
 
-mix.js('js/purecounter.js', 'dist/')
+mix.webpackConfig({
+    output: {
+        library: 'walterwhite',
+        path: path.join(__dirname, 'dist'),
+        filename: path.join('[name]', 'purecounter.js'),
+        libraryTarget: 'umd',
+        umdNamedDefine: true
+    }
+}).js('js/purecounter.js', 'dist/')
     .js('js/purecounter_vanilla.js', 'dist/')
     .js('app.js', 'asset/');
