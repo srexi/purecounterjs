@@ -2,23 +2,23 @@
 **1.4kb GZIPPED Lightweight Javascript Counter**
 
 <p align="center">
-    <a href="https://www.npmjs.com/package/@srexi/purecounter.js"><img src="https://img.shields.io/npm/v/@srexi/purecounter.js.svg" alt="NPM"></a>
-    <a href="https://npmcharts.com/compare/@srexi/purecounter.js?minimal=true"><img src="https://img.shields.io/npm/dt/@srexi/purecounter.js.svg" alt="NPM"></a>
-    <a href="https://www.npmjs.com/package/@srexi/purecounter.js"><img src="https://img.shields.io/npm/l/@srexi/purecounter.js.svg" alt="NPM"></a>
+    <a href="https://www.npmjs.com/package/@srexi/purecounterjs"><img src="https://img.shields.io/npm/v/@srexi/purecounterjs.svg" alt="NPM"></a>
+    <a href="https://npmcharts.com/compare/@srexi/purecounterjs?minimal=true"><img src="https://img.shields.io/npm/dt/@srexi/purecounterjs.svg" alt="NPM"></a>
+    <a href="https://www.npmjs.com/package/@srexi/purecounterjs"><img src="https://img.shields.io/npm/l/@srexi/purecounterjs.svg" alt="NPM"></a>
 </p>
 
 ## Demo
-[Proudly Hosted On Github Pages](https://srexi.github.io/purecounter.js/)
+[Proudly Hosted On Github Pages](https://srexi.github.io/purecounterjs/)
 
 ## Install
 
 ### NPM
 ```
-npm i --save @srexi/purecounter.js
+npm i --save @srexi/purecounterjs
 ```
 In your app.js import and initialized the module like normal.
 ```js
-import PureCounter from '@srexi/purecounter.js';
+import PureCounter from '@srexi/purecounterjs';
 const pure = new PureCounter;
 ```
 
@@ -34,13 +34,13 @@ If you wish to skip the modular build and NOT use npm you can use the vanilla bu
 <body>
     ...
 
-    <script src="https://cdn.jsdelivr.net/npm/@srexi/purecounter.js/dist/purecounter_vanilla.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@srexi/purecounterjs/dist/purecounter_vanilla.js"></script>
 </body>
 </html>
 ```
 
 ### Self hosted
-Download the dist/purecounter_vanilla.js file(for the minified version) or the js/purecounter.js file (for the prettified) version and include it right before your closing body tag:
+Download the dist/purecounter_vanilla.js file(for the minified version) or the js/purecounterjs file (for the prettified) version and include it right before your closing body tag:
 ```html
 <html>
 <head>
@@ -90,7 +90,7 @@ decimals: 0 [uint]
 legacy: true [boolean]
 ```
 
-![Browser Tests By Browserstack](https://github.com/srexi/purecounter.js/blob/master/asset/browserstack-logo-600x315.png)
+![Browser Tests By Browserstack](https://github.com/srexi/purecounterjs/blob/master/asset/browserstack-logo-600x315.png)
 ## Browser Support
 - Chrome/Edge/Opera: Yes
 - Firefox: Yes
