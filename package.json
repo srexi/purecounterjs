@@ -1,6 +1,6 @@
 {
-  "name": "@srexi/purecounter.js",
-  "version": "1.1.0",
+  "name": "@srexi/purecounterjs",
+  "version": "1.1.1",
   "description": "A simple yet configurable native javascript counter which you can count on.",
   "main": "dist/purecounter.js",
   "scripts": {
@@ -13,12 +13,13 @@
   },
   "keywords": [
     "javascript",
-    "counter",
-    "nojquery",
-    "lightweight",
     "simple",
+    "counter",
+    "fast",
+    "lightweight",
     "easy",
-    "fast"
+    "nojquery",
+    "noquery"
   ],
   "author": "Stig Rex",
   "license": "MIT",
@@ -30,10 +31,10 @@
   "dependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/srexi/purecounter.js.git"
+    "url": "https://github.com/srexi/purecounterjs.git"
   },
   "bugs": {
-    "url": "https://github.com/srexi/purecounter.js/issues"
+    "url": "https://github.com/srexi/purecounterjs/issues"
   },
-  "homepage": "https://github.com/srexi/purecounter.js#readme"
+  "homepage": "https://github.com/srexi/purecounterjs#readme"
 }

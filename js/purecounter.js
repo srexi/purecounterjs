@@ -29,7 +29,6 @@ export default class PureCounter {
 	}
 
 	animateLegacy(elements) {
-		console.log("calling animateLegacy");
 		for (var i = 0; i < elements.length; i++) {
 			var config = this.parseConfig(elements[i]);
 			if (config.legacy === true && this.elementIsInView(elements[i])) {
