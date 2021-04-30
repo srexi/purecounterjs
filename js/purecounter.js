@@ -85,7 +85,11 @@ export default class PureCounter {
 				clearInterval(counterWorker);
 
 				if (currentCount != config.end) {
-					element.innerHTML = config.decimals <= 0 ? parseInt(config.end) : parseFloat(config.end).toFixed(config.decimals);
+					element.innerHTML = this.applySeparator(
+						config.decimals <= 0
+							? parseInt(config.end)
+							: parseFloat(config.end).toFixed(config.decimals), config
+					)
 				}
 			}
 		}, config.delay);
@@ -104,6 +108,8 @@ export default class PureCounter {
 			once: true,
 			decimals: 0,
 			legacy: true,
+			separator: false,
+			separatorsymbol: ','
 		};
 
 		for (var i = 0; i < configValues.length; i++) {
@@ -124,8 +130,13 @@ export default class PureCounter {
 	}
 
 	formatNumber(number, config) {
-		return config.decimals <= 0 ? parseInt(number) : number.toLocaleString(undefined, { minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals });
+		let value = config.decimals <= 0
+			? parseInt(number) 
+			: number.toLocaleString(undefined, { minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals });
+			
+		return this.applySeparator(value, config)
 	}
+
 
 	castDataType(data) {
 		if (/^[0-9]+\.[0-9]+$/.test(data)) {
@@ -135,6 +146,15 @@ export default class PureCounter {
 			return parseInt(data);
 		}
 		return data;
+	}
+
+	applySeparator(value, config){
+		if (!config.separator) {
+			return value.toString().replace(new RegExp(/,/gi, 'gi'), '')
+		}
+
+		return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+					.replace(new RegExp(/,/gi, 'gi'), config.separatorsymbol)
 	}
 
 	elementIsInView(element) {
