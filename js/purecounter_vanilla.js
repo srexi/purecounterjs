@@ -80,7 +80,11 @@ function startCounter(element, config) {
             clearInterval(counterWorker);
 
             if (currentCount != config.end) {
-                element.innerHTML = config.decimals <= 0 ? parseInt(config.end) : parseFloat(config.end).toFixed(config.decimals);
+                element.innerHTML = checkSeparator(
+                    config.decimals <= 0
+                        ? parseInt(config.end)
+                        : parseFloat(config.end).toFixed(config.decimals), config
+                )
             }
         }
     }, config.delay);
@@ -99,6 +103,8 @@ function parseConfig(element) {
         once: true,
         decimals: 0,
         legacy: true,
+        separator: false,
+        separatorsymbol: ','
     };
 
     for (var i = 0; i < configValues.length; i++) {
@@ -119,7 +125,17 @@ function nextNumber(number, steps, config, mode) {
 }
 
 function formatNumber(number, config) {
-    return config.decimals <= 0 ? parseInt(number) : number.toLocaleString(undefined, { minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals });
+    let value = config.decimals <= 0
+                    ? parseInt(number) 
+                    : number.toLocaleString(undefined, { minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals });
+
+    return checkSeparator(value, config)
+}
+
+function checkSeparator(value, config){
+    return config.separator === 'true'
+        ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, config.separatorsymbol)
+        : value
 }
 
 function castDataType(data) {
