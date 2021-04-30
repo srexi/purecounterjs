@@ -85,7 +85,7 @@ export default class PureCounter {
 				clearInterval(counterWorker);
 
 				if (currentCount != config.end) {
-					element.innerHTML = this.checkSeparator(
+					element.innerHTML = this.applySeparator(
 						config.decimals <= 0
 							? parseInt(config.end)
 							: parseFloat(config.end).toFixed(config.decimals), config
@@ -133,8 +133,8 @@ export default class PureCounter {
 		let value = config.decimals <= 0
 			? parseInt(number) 
 			: number.toLocaleString(undefined, { minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals });
-
-		return this.checkSeparator(value, config)
+			
+		return this.applySeparator(value, config)
 	}
 
 
@@ -148,10 +148,13 @@ export default class PureCounter {
 		return data;
 	}
 
-	checkSeparator(value, config){
-		return config.separator === 'true'
-			? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, config.separatorsymbol)
-			: value
+	applySeparator(value, config){
+		if (config.separator === 'true') {
+			value = value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+        	value = value.replace(new RegExp(/,/gi, 'gi'), config.separatorsymbol)
+		}
+
+		return value
 	}
 
 	elementIsInView(element) {

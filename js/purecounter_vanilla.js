@@ -80,7 +80,7 @@ function startCounter(element, config) {
             clearInterval(counterWorker);
 
             if (currentCount != config.end) {
-                element.innerHTML = checkSeparator(
+                element.innerHTML = applySeparator(
                     config.decimals <= 0
                         ? parseInt(config.end)
                         : parseFloat(config.end).toFixed(config.decimals), config
@@ -129,13 +129,16 @@ function formatNumber(number, config) {
                     ? parseInt(number) 
                     : number.toLocaleString(undefined, { minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals });
 
-    return checkSeparator(value, config)
+    return applySeparator(value, config);
 }
 
-function checkSeparator(value, config){
-    return config.separator === 'true'
-        ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, config.separatorsymbol)
-        : value
+function applySeparator(value, config){
+    if (config.separator === 'true') {
+        value = value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+        value = value.replace(new RegExp(/,/gi, 'gi'), config.separatorsymbol)
+    }
+
+    return value
 }
 
 function castDataType(data) {
