@@ -133,8 +133,8 @@ function formatNumber(number, config) {
 }
 
 function applySeparator(value, config){
-    if (config.separator === 'false') {
-        return value
+    if (!config.separator) {
+        return value.toString().replace(new RegExp(/,/gi, 'gi'), '')
     }
 
     return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
