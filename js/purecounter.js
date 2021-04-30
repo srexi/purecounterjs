@@ -149,12 +149,12 @@ export default class PureCounter {
 	}
 
 	applySeparator(value, config){
-		if (config.separator === 'true') {
-			value = value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-        	value = value.replace(new RegExp(/,/gi, 'gi'), config.separatorsymbol)
+		if (config.separator === 'false') {
+			return value
 		}
 
-		return value
+		return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+					.replace(new RegExp(/,/gi, 'gi'), config.separatorsymbol)
 	}
 
 	elementIsInView(element) {
