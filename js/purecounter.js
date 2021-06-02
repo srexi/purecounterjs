@@ -108,6 +108,7 @@ export default class PureCounter {
 			once: true,
 			decimals: 0,
 			legacy: true,
+        	currency: false,
 			separator: false,
 			separatorsymbol: ','
 		};
@@ -133,10 +134,26 @@ export default class PureCounter {
 		let value = config.decimals <= 0
 			? parseInt(number) 
 			: number.toLocaleString(undefined, { minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals });
-			
+		value = config.currency ? convertToCurrencySystem(number) : value;
+
 		return this.applySeparator(value, config)
 	}
 
+	convertToCurrencySystem (number) {
+		// Twelve Zeroes for Trillions
+		return Math.abs(Number(number)) >= 1.0e+12
+		? (Math.abs(Number(number)) / 1.0e+12).toFixed(1) + "T"
+		// Nine Zeroes for Millions 
+		: Math.abs(Number(number)) >= 1.0e+9
+		? (Math.abs(Number(number)) / 1.0e+9).toFixed(1) + "B"
+		// Six Zeroes for Millions 
+		: Math.abs(Number(number)) >= 1.0e+6
+		? (Math.abs(Number(number)) / 1.0e+6).toFixed(1) + "M"
+		// Three Zeroes for Thousands
+		: Math.abs(Number(number)) >= 1.0e+3
+		? (Math.abs(Number(number)) / 1.0e+3).toFixed(1) + "K"
+		: Math.abs(Number(number));
+	}
 
 	castDataType(data) {
 		if (/^[0-9]+\.[0-9]+$/.test(data)) {
