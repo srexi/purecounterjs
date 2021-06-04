@@ -108,7 +108,8 @@ export default class PureCounter {
 			once: true,
 			decimals: 0,
 			legacy: true,
-        	currency: false,
+			currency: false,
+			currencysymbol: false,
 			separator: false,
 			separatorsymbol: ','
 		};
@@ -134,25 +135,27 @@ export default class PureCounter {
 		let value = config.decimals <= 0
 			? parseInt(number) 
 			: number.toLocaleString(undefined, { minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals });
-		value = config.currency ? convertToCurrencySystem(number) : value;
+		value = config.currency ? convertToCurrencySystem(number, config) : value;
 
 		return this.applySeparator(value, config)
 	}
 
-	convertToCurrencySystem (number) {
+	convertToCurrencySystem (number, config) {
+    let symbol = config.currencysymbol || "", // This will be printed before the number.
+        limit = config.decimals || 1 // Use the decimals config integration on currency or set to 1;
 		// Twelve Zeroes for Trillions
-		return Math.abs(Number(number)) >= 1.0e+12
-		? (Math.abs(Number(number)) / 1.0e+12).toFixed(1) + "T"
-		// Nine Zeroes for Millions 
+		return symbol + (Math.abs(Number(number)) >= 1.0e+12
+		? (Math.abs(Number(number)) / 1.0e+12).toFixed(limit) + " T"
+		// Nine Zeroes for Billions 
 		: Math.abs(Number(number)) >= 1.0e+9
-		? (Math.abs(Number(number)) / 1.0e+9).toFixed(1) + "B"
+		? (Math.abs(Number(number)) / 1.0e+9).toFixed(limit) + " B"
 		// Six Zeroes for Millions 
 		: Math.abs(Number(number)) >= 1.0e+6
-		? (Math.abs(Number(number)) / 1.0e+6).toFixed(1) + "M"
+		? (Math.abs(Number(number)) / 1.0e+6).toFixed(limit) + " M"
 		// Three Zeroes for Thousands
 		: Math.abs(Number(number)) >= 1.0e+3
-		? (Math.abs(Number(number)) / 1.0e+3).toFixed(1) + "K"
-		: Math.abs(Number(number));
+		? (Math.abs(Number(number)) / 1.0e+3).toFixed(limit) + " K"
+		: Math.abs(Number(number)));
 	}
 
 	castDataType(data) {
