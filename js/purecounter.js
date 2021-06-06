@@ -135,7 +135,7 @@ export default class PureCounter {
 		let value = config.decimals <= 0
 			? parseInt(number) 
 			: number.toLocaleString(undefined, { minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals });
-		value = config.currency ? convertToCurrencySystem(number, config) : value;
+		value = config.currency ? this.convertToCurrencySystem(number, config) : value;
 
 		return this.applySeparator(value, config)
 	}
