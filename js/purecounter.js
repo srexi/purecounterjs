@@ -18,7 +18,7 @@ export default class PureCounter {
 				"threshold": 0.5
 			});
 
-			elements.forEach(function(element) {intersectObserver.observe(element);})
+			elements.forEach(element => {intersectObserver.observe(element);})
 		} else {
 			if (window.addEventListener) {
 				this.animateLegacy(elements);
@@ -32,7 +32,7 @@ export default class PureCounter {
 
 	/** This legacy to make Purecounter use very leightweight & fast */
 	animateLegacy(elements) {
-		elements.forEach(function(element) {
+		elements.forEach(element => {
 			var config = this.parseConfig(element);
 			if(config.legacy === true && this.elementIsInView(element)) {
 				this.animateElements([element]);
@@ -42,23 +42,23 @@ export default class PureCounter {
 
 	/** Main Eliment Count Animatation */
 	animateElements(elements, observer) {
-		elements.forEach(function (element) {
+		elements.forEach(element => {
 			var elm = element.target || element; // Just make sure which element will be used
-			var elementConfig =  this.parseConfig(elm); // Get config value on that element
+			var elementConfig = this.parseConfig(elm); // Get config value on that element
 
 			// If duration is less than or equal zero, just format the 'end' value
 			if (elementConfig.duration <= 0) {
-				return elm.innerHTML =  this.formatNumber(elementConfig.end, elementConfig);
+				return elm.innerHTML = this.formatNumber(elementConfig.end, elementConfig);
 			}
 			
-			if ((!observer && ! this.elementIsInView(element)) || (observer && element.intersectionRatio < 0.5)) {
+			if ((!observer && !this.elementIsInView(element)) || (observer && element.intersectionRatio < 0.5)) {
 				var value = elementConfig.start > elementConfig.end ? elementConfig.end : elementConfig.start;
-				return elm.innerHTML =  this.formatNumber(value, elementConfig);
+				return elm.innerHTML = this.formatNumber(value, elementConfig);
 			}
 
 			// If duration is more than 0, then start the counter
-			setTimeout(function() {
-				return  this.startCounter(elm, elementConfig);
+			setTimeout(() => {
+				return this.startCounter(elm, elementConfig);
 			}, elementConfig.delay);
 		});
 	}
@@ -87,7 +87,7 @@ export default class PureCounter {
 		}
 
 		// Now, start counting with counterWorker using Interval method based on delay
-		var counterWorker = setInterval(function() {
+		var counterWorker = setInterval(() => {
 			// First, determine the next value base on current value, increment value, and cound mode
 			var nextNum = this.nextNumber(currentCount, incrementsPerStep, countMode);
 			// Next, print that value to the page
@@ -130,7 +130,7 @@ export default class PureCounter {
 		var elementConfig = {};
 
 		// And then, fill the element config based on config values
-		configValues.forEach(function(e) {
+		configValues.forEach(e => {
 			var name = e.name.replace('data-purecounter-', '').toLowerCase();
 			var value = name == 'duration' ? parseInt(this.parseValue(e.value) * 1000) : this.parseValue(e.value);
 			elementConfig[name] = value; // We will get an object
