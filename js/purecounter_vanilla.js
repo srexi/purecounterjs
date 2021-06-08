@@ -13,7 +13,7 @@ function registerEventListeners() {
             "threshold": 0.5
         });
 
-        elements.forEach(function(element) {intersectObserver.observe(element);})
+        elements.forEach(element => {intersectObserver.observe(element);})
     } else {
         if (window.addEventListener) {
             animateLegacy(elements);
@@ -27,7 +27,7 @@ function registerEventListeners() {
 
 /** This legacy to make Purecounter use very leightweight & fast */
 function animateLegacy(elements) {
-    elements.forEach(function(element) {
+    elements.forEach(element => {
         var config = parseConfig(element);
         if(config.legacy === true && elementIsInView(element)) {
             animateElements([element]);
@@ -37,7 +37,7 @@ function animateLegacy(elements) {
 
 /** Main Eliment Count Animatation */
 function animateElements(elements, observer) {
-    elements.forEach(function(element) {
+    elements.forEach(element => {
         var elm = element.target || element; // Just make sure which element will be used
         var elementConfig = parseConfig(elm); // Get config value on that element
 
@@ -52,7 +52,7 @@ function animateElements(elements, observer) {
         }
 
         // If duration is more than 0, then start the counter
-        setTimeout(function() {
+        setTimeout(() => {
             return startCounter(elm, elementConfig);
         }, elementConfig.delay);
     });
@@ -82,7 +82,7 @@ function startCounter(element, config) {
     }
 
     // Now, start counting with counterWorker using Interval method based on delay
-    var counterWorker = setInterval(function() {
+    var counterWorker = setInterval(() => {
         // First, determine the next value base on current value, increment value, and cound mode
         var nextNum = nextNumber(currentCount, incrementsPerStep, countMode);
         // Next, print that value to the page
@@ -125,7 +125,7 @@ function parseConfig(element) {
     var elementConfig = {};
 
     // And then, fill the element config based on config values
-    configValues.forEach(function(e) {
+    configValues.forEach(e => {
         var name = e.name.replace('data-purecounter-', '').toLowerCase();
         var value = name == 'duration' ? parseInt(parseValue(e.value) * 1000) : parseValue(e.value);
         elementConfig[name] = value; // We will get an object
