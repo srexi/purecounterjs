@@ -3,104 +3,111 @@ export default class PureCounter {
 		this.registerEventListeners();
 	}
 
+	/** Initial function */
 	registerEventListeners() {
+		/** Get all elements with class 'purecounter' */
 		var elements = document.querySelectorAll('.purecounter');
+		/** Get browser Intersection Listener Support */
 		var intersectionSupported = this.intersectionListenerSupported();
-
+		
+		/** Run animateElements base on Intersection Support */
 		if (intersectionSupported) {
-			var intersectionObserver = new IntersectionObserver(this.animateElements.bind(this), {
+			var intersectObserver = new IntersectionObserver(this.animateElements.bind(this), {
 				"root": null,
 				"rootMargin": '20px',
 				"threshold": 0.5
 			});
 
-			for (var i = 0; i < elements.length; i++) {
-				intersectionObserver.observe(elements[i]);
-			}
+			elements.forEach(function(element) {intersectObserver.observe(element);})
 		} else {
 			if (window.addEventListener) {
 				this.animateLegacy(elements);
-
-				window.addEventListener('scroll', e => {
+		
+				window.addEventListener('scroll', function (e) {
 					this.animateLegacy(elements);
 				}, { "passive": true });
 			}
 		}
 	}
 
+	/** This legacy to make Purecounter use very leightweight & fast */
 	animateLegacy(elements) {
-		for (var i = 0; i < elements.length; i++) {
-			var config = this.parseConfig(elements[i]);
-			if (config.legacy === true && this.elementIsInView(elements[i])) {
-				this.animateElements([elements[i]]);
+		elements.forEach(function(element) {
+			var config = this.parseConfig(element);
+			if(config.legacy === true && this.elementIsInView(element)) {
+				this.animateElements([element]);
 			}
-		}
+		})
 	}
 
+	/** Main Eliment Count Animatation */
 	animateElements(elements, observer) {
-		elements.forEach((element) => {
-			var elementConfig = typeof element.target !== "undefined" ? this.parseConfig(element.target) : this.parseConfig(element);
+		elements.forEach(function (element) {
+			var elm = element.target || element; // Just make sure which element will be used
+			var elementConfig =  this.parseConfig(elm); // Get config value on that element
 
+			// If duration is less than or equal zero, just format the 'end' value
 			if (elementConfig.duration <= 0) {
-				return element.innerHTML = elementConfig.end.toFixed(elementConfig.decimals);
+				return elm.innerHTML =  this.formatNumber(elementConfig.end, elementConfig);
 			}
-			if ((!observer && !this.elementIsInView(element)) || (observer && element.intersectionRatio < 0.5)) {
-				return element.target.innerHTML = elementConfig.start > elementConfig.end ? elementConfig.end : elementConfig.start;
+			
+			if ((!observer && ! this.elementIsInView(element)) || (observer && element.intersectionRatio < 0.5)) {
+				var value = elementConfig.start > elementConfig.end ? elementConfig.end : elementConfig.start;
+				return elm.innerHTML =  this.formatNumber(value, elementConfig);
 			}
 
-			setTimeout(() => {
-				if (typeof element.target !== "undefined") {
-					return this.startCounter(element.target, elementConfig);
-				}
-
-				return this.startCounter(element, elementConfig);
+			// If duration is more than 0, then start the counter
+			setTimeout(function() {
+				return  this.startCounter(elm, elementConfig);
 			}, elementConfig.delay);
 		});
 	}
 
+	/** This is the the counter method */
 	startCounter(element, config) {
+		// First, get the increments step
 		var incrementsPerStep = (config.end - config.start) / (config.duration / config.delay);
+		// Next, set the counter mode (Increment or Decrement)
 		var countMode = 'inc';
+
+		// Set mode to 'decrement' and 'increment step' to minus if start is larger than end
 		if (config.start > config.end) {
 			countMode = 'dec';
 			incrementsPerStep *= -1;
 		}
-		if (incrementsPerStep < 1 && config.decimals <= 0) {
-			incrementsPerStep = 1;
-		}
-
-		var currentCount = config.decimals <= 0 ? parseInt(config.start) : parseFloat(config.start).toFixed(config.decimals);
-		element.innerHTML = currentCount;
-
-		if (config.once === true) {
+		
+		// Next, determine the starting value
+		var currentCount = this.parseValue(config.start);
+		// And then print it's value to the page
+		element.innerHTML = this.formatNumber(currentCount, config);
+		
+		// If the config 'once' is true, then set the 'duration' to 0
+		if(config.once === true){
 			element.setAttribute('data-purecounter-duration', 0);
 		}
 
-		var counterWorker = setInterval(() => {
-			var nextNum = this.nextNumber(currentCount, incrementsPerStep, config, countMode);
+		// Now, start counting with counterWorker using Interval method based on delay
+		var counterWorker = setInterval(function() {
+			// First, determine the next value base on current value, increment value, and cound mode
+			var nextNum = this.nextNumber(currentCount, incrementsPerStep, countMode);
+			// Next, print that value to the page
 			element.innerHTML = this.formatNumber(nextNum, config);
+			// Now set that value to the current value, becouse it's already printed
 			currentCount = nextNum;
 
+			// If the value is larger or less than the 'end' (base on mode), then  print the end value and stop the Interval
 			if ((currentCount >= config.end && countMode == 'inc') || (currentCount <= config.end && countMode == 'dec')) {
+				element.innerHTML = this.formatNumber(config.end, config);
 				clearInterval(counterWorker);
-
-				if (currentCount != config.end) {
-					element.innerHTML = this.applySeparator(
-						config.decimals <= 0
-							? parseInt(config.end)
-							: parseFloat(config.end).toFixed(config.decimals), config
-					)
-				}
 			}
 		}, config.delay);
 	}
 
+	/** This function is to generate the element Config */
 	parseConfig(element) {
-		var configValues = [].filter.call(element.attributes, attribute => {
-			return /^data-purecounter-/.test(attribute.name);
-		});
-
-		var newConfig = {
+		// First, we need to declare the base Config
+		// This config will be used if the element doesn't have config
+		var baseConfig = {
 			start: 0,
 			end: 9001,
 			duration: 2000,
@@ -114,69 +121,95 @@ export default class PureCounter {
 			separatorsymbol: ','
 		};
 
-		for (var i = 0; i < configValues.length; i++) {
-			var valueInd = configValues[i].name.replace('data-purecounter-', '');
-			newConfig[valueInd.toLowerCase()] = valueInd.toLowerCase() == 'duration' ? parseInt(this.castDataType(configValues[i].value) * 1000) : this.castDataType(configValues[i].value);
-		}
+		// Next, gett all 'data-precounter' attributes value. Store to array
+		var configValues = [].filter.call(element.attributes, function(attr) {
+			return /^data-purecounter-/.test(attr.name);
+		});
 
-		return newConfig;
+		// Now, we create element config as an empty object
+		var elementConfig = {};
+
+		// And then, fill the element config based on config values
+		configValues.forEach(function(e) {
+			var name = e.name.replace('data-purecounter-', '').toLowerCase();
+			var value = name == 'duration' ? parseInt(this.parseValue(e.value) * 1000) : this.parseValue(e.value);
+			elementConfig[name] = value; // We will get an object
+		})
+
+		// Last marge base config with element config and return it as an object
+		return Object.assign(baseConfig, elementConfig);
 	}
 
-	nextNumber(number, steps, config, mode) {
-		if (!mode) mode = 'inc';
-		if (mode === 'inc') {
-			return config.decimals <= 0 ? parseInt(number) + parseInt(steps) : parseFloat(number) + parseFloat(steps);
-		}
+	/** This function is to get the next number */
+	nextNumber(number, steps, mode = 'inc') {
+		// First, get the exact value from the number and step (int or float)
+		number = this.parseValue(number);
+		steps = this.parseValue(steps);
 
-		return config.decimals <= 0 ? parseInt(number) - parseInt(steps) : parseFloat(number) - parseFloat(steps);
+		// Last, get the next number based on current number, increment step, and count mode
+		// Always return it as float
+		return parseFloat(mode === 'inc' ? (number + steps) : (number - steps));
 	}
 
-	formatNumber(number, config) {
-		let value = config.decimals <= 0
-			? parseInt(number) 
-			: number.toLocaleString(undefined, { minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals });
-		value = config.currency ? this.convertToCurrencySystem(number, config) : value;
-
-		return this.applySeparator(value, config)
-	}
-
+	/** This function is to convert number into currency format */
 	convertToCurrencySystem (number, config) {
-    let symbol = config.currencysymbol || "", // This will be printed before the number.
-        limit = config.decimals || 1 // Use the decimals config integration on currency or set to 1;
-		// Twelve Zeroes for Trillions
-		return symbol + (Math.abs(Number(number)) >= 1.0e+12
-		? (Math.abs(Number(number)) / 1.0e+12).toFixed(limit) + " T"
-		// Nine Zeroes for Billions 
-		: Math.abs(Number(number)) >= 1.0e+9
-		? (Math.abs(Number(number)) / 1.0e+9).toFixed(limit) + " B"
-		// Six Zeroes for Millions 
-		: Math.abs(Number(number)) >= 1.0e+6
-		? (Math.abs(Number(number)) / 1.0e+6).toFixed(limit) + " M"
-		// Three Zeroes for Thousands
-		: Math.abs(Number(number)) >= 1.0e+3
-		? (Math.abs(Number(number)) / 1.0e+3).toFixed(limit) + " K"
-		: Math.abs(Number(number)));
+		var symbol = config.currencysymbol || "", // Set the Currency Symbol (if any)
+			limit = config.decimals || 1,  // Set the decimal limit (default is 1)
+			number = Math.abs(Number(number)); // Get the absolute value of number
+
+		// Set the value
+		var value = number >= 1.0e+12 ? `${(number / 1.0e+12).toFixed(limit)} T` // Twelve zeros for Trillions
+			: number >= 1.0e+9 ? `${(number / 1.0e+9).toFixed(limit)} B` // Nine zeros for Billions
+			: number >= 1.0e+6 ? `${(number / 1.0e+6).toFixed(limit)} M`  // Six zeros for Millions
+			: number >= 1.0e+3 ? `${(number / 1.0e+12).toFixed(limit)} K` // Three zeros for Thausands
+			: number.toFixed(limit); // If less than 1000, print it's value
+
+		// Apply symbol before the value and return it as string
+		return symbol + value;
 	}
 
-	castDataType(data) {
+	/** This function is to get the last formated number */
+	applySeparator(value, config){
+		// If config separator is false, delete all separator
+		if (!config.separator) {
+			return value.replace(new RegExp(/,/gi, 'gi'), '')
+		}
+
+		// If config separator is true, then create separator
+		return value.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+			.replace(new RegExp(/,/gi, 'gi'), config.separatorsymbol)
+	}
+
+	/** This function is to get formated number to be printed in the page */
+	formatNumber(number, config) {
+		// This is the configuration for 'toLocaleString' method
+		var strConfig = {minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals};
+		// Set the number if it using currency, then convert. If doesn't, just parse it as float
+		number = config.currency ? this.convertToCurrencySystem(number, config) : parseFloat(number);
+		
+		// Last, apply the number separator using number as string
+		return this.applySeparator(number.toLocaleString(undefined, strConfig), config);
+	}
+
+	/** This function is to get the parsed value */
+	parseValue(data) {
+		// If number with dot (.), will be parsed as float
 		if (/^[0-9]+\.[0-9]+$/.test(data)) {
 			return parseFloat(data);
 		}
+		// If just number, will be parsed as integer
 		if (/^[0-9]+$/.test(data)) {
 			return parseInt(data);
 		}
+		// If it's boolean string, will be parsed as boolean
+		if (/^true|false/i.test(data)) {
+			return /^true/i.test(data);
+		}
+		// Return it's value as default
 		return data;
 	}
 
-	applySeparator(value, config){
-		if (!config.separator) {
-			return value.toString().replace(new RegExp(/,/gi, 'gi'), '')
-		}
-
-		return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
-					.replace(new RegExp(/,/gi, 'gi'), config.separatorsymbol)
-	}
-
+	/** This function is to detect the element is in view or not. */ 
 	elementIsInView(element) {
 		var top = element.offsetTop;
 		var left = element.offsetLeft;
@@ -197,6 +230,7 @@ export default class PureCounter {
 		);
 	}
 
+	/** Just some condition to check browser Intersection Support */
 	intersectionListenerSupported() {
 		return ('IntersectionObserver' in window) &&
 			('IntersectionObserverEntry' in window) &&
