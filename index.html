@@ -10,8 +10,11 @@
 
 <body>
     <div>
-        <p>So close yet so far: <span data-purecounter-duration="2.5" data-purecounter-end="9000"
-                class="purecounter">0</span>
+        <p>Bug Test (count 10 in 60 seconds): <span data-purecounter-end="10" data-purecounter-duration="60"
+                data-purecounter-once="true" class="purecounter">0</span></p>
+    </div>
+    <div style="margin-top:100vh;">
+        <p>So close yet so far: <span data-purecounter-duration="2.5" data-purecounter-end="9000" class="purecounter">0</span>
         </p>
     </div>
     <div style="margin-top:100vh;">
@@ -44,6 +47,8 @@
             data-purecounter-currencysymbol="$"
             data-purecounter-once="true" class="purecounter">0</span></p>
     </div>
+
+    <!-- <script src="js/purecounter_vanilla.js"></script> -->
 
     <script async src="dist/purecounter.js"></script>
 </body>
