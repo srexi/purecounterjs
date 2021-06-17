@@ -1,5 +1,5 @@
 export default class PureCounter {
-	constructor() {
+	constructor(options) {
 		this.defaults = {
 		    start: 0,
 		    end: 100,
