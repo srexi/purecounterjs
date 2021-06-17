@@ -1,12 +1,27 @@
 export default class PureCounter {
-	constructor() {
+	constructor(options) {
+		this.defaults = {
+		    start: 0,
+		    end: 100,
+		    duration: 2000,
+		    delay: 10,
+		    once: true,
+		    decimals: 0,
+		    legacy: true,
+		    currency: false,
+		    currencysymbol: false,
+		    separator: false,
+		    separatorsymbol: ',',
+		    selector: '.purecounter'
+		}
+		this.configOptions = Object.assign({}, this.defaults, options || {});
 		this.registerEventListeners();
 	}
 
 	/** Initial function */
 	registerEventListeners() {
 		/** Get all elements with class 'purecounter' */
-		var elements = document.querySelectorAll('.purecounter');
+		var elements = document.querySelectorAll(this.configOptions.selector);
 		/** Get browser Intersection Listener Support */
 		var intersectionSupported = this.intersectionListenerSupported();
 		
@@ -107,19 +122,7 @@ export default class PureCounter {
 	parseConfig(element) {
 		// First, we need to declare the base Config
 		// This config will be used if the element doesn't have config
-		var baseConfig = {
-			start: 0,
-			end: 9001,
-			duration: 2000,
-			delay: 10,
-			once: true,
-			decimals: 0,
-			legacy: true,
-			currency: false,
-			currencysymbol: false,
-			separator: false,
-			separatorsymbol: ','
-		};
+		var baseConfig = {...this.configOptions};
 
 		// Next, gett all 'data-precounter' attributes value. Store to array
 		var configValues = [].filter.call(element.attributes, function(attr) {
