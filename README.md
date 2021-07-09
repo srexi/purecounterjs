@@ -40,7 +40,7 @@ If you wish to skip the modular build and NOT use npm you can use the vanilla bu
 ```
 
 ### Self hosted
-Download the dist/purecounter_vanilla.js file(for the minified version) or the js/purecounterjs file (for the prettified) version and include it right before your closing body tag:
+Download the [dist/purecounter_vanilla.js]() file(for the minified version) or the [js/purecounter.js]() file (for the prettified) version and include it right before your closing body tag:
 ```html
 <html>
 <head>
