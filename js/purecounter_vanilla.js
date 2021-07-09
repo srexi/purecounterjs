@@ -116,7 +116,7 @@ function parseConfig(element) {
         separatorsymbol: ','
     };
 
-    // Next, gett all 'data-precounter' attributes value. Store to array
+    // Next, get all 'data-precounter' attributes value. Store to array
     var configValues = [].filter.call(element.attributes, function(attr) {
         return /^data-purecounter-/.test(attr.name);
     });

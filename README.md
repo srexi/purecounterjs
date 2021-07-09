@@ -22,7 +22,7 @@ import PureCounter from '@srexi/purecounterjs';
 const pure = new PureCounter;
 ```
 
-### Vanilla 
+### Vanilla
 If you wish to skip the modular build and NOT use npm you can use the vanilla build like so:
 
 ### CDN
