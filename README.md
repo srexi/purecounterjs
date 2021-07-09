@@ -80,10 +80,10 @@ duration - The time in seconds for the animation to complete, you can use decima
 delay - The delay between each iteration (the default of 10 will produce 100 fps)
 once - If it should only do the animation once. If this is off the number will do the animation every time the element comes into view, otherwise it will only do it the first time.
 decimals - how many decimal places to show. It will automatically format the number according to the individual users browser standards.
-legacy - Purecounter will use the very leightweight & fast intersectionListener available in most modern browsers. If this is true it will use the scroll event listener on browsers which does not support the intersection listener (RECOMMENDED: true).
+legacy - Purecounter will use the very lightweight & fast intersectionListener available in most modern browsers. If this is true it will use the scroll event listener on browsers which does not support the intersection listener (RECOMMENDED: true).
 currency - This will enable International Currency System format that will short your number (e.g. Thousands become K, Million become M, etc.), also integrated with decimals configuration (only show 1 decimals by default).
 currencysymbol - This is the char or symbol or string that will be added before the number when you enable Currency System format.
-separator - This will enable comma separator for thausands.
+separator - This will enable comma separator for thousands.
 separatorsymbol - Allow you to customize what separator symbol, if none is specified default symbol will be comma (,).
 ```
 
@@ -93,7 +93,7 @@ separatorsymbol - Allow you to customize what separator symbol, if none is speci
 start: 0 [uint]
 end: 9001 [uint]
 duration: 2 [seconds|uint]
-delay: 10 [miliseconds|uint]
+delay: 10 [milliseconds|uint]
 once: true [boolean]
 decimals: 0 [uint]
 legacy: true [boolean]
