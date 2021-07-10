@@ -1,0 +1,13 @@
+# ignore all files, only allow dist files
+*
+# Add dist files
+!dist/purecounter.js
+!dist/purecounter_vanilla.js
+# Add module files
+!js/purecounter.js
+!js/purecounter_vanilla.js
+!purecounter.js
+# NPM would add them anyway
+!package.json
+!README.md
+!LICENSE

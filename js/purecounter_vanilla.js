@@ -4,7 +4,7 @@ function registerEventListeners() {
     var elements = document.querySelectorAll('.purecounter');
     /** Get browser Intersection Listener Support */
     var intersectionSupported = intersectionListenerSupported();
-    
+
     /** Run animateElements base on Intersection Support */
     if (intersectionSupported) {
         var intersectObserver = new IntersectionObserver(animateElements, {
@@ -17,7 +17,7 @@ function registerEventListeners() {
     } else {
         if (window.addEventListener) {
             animateLegacy(elements);
-    
+
             window.addEventListener('scroll', function(e) {
                 animateLegacy(elements);
             }, { "passive": true });
@@ -25,7 +25,7 @@ function registerEventListeners() {
     }
 }
 
-/** This legacy to make Purecounter use very leightweight & fast */
+/** This legacy to make Purecounter use very lightweight & fast */
 function animateLegacy(elements) {
     elements.forEach(element => {
         var config = parseConfig(element);
@@ -35,7 +35,7 @@ function animateLegacy(elements) {
     })
 }
 
-/** Main Eliment Count Animatation */
+/** Main Element Count Animation */
 function animateElements(elements, observer) {
     elements.forEach(element => {
         var elm = element.target || element; // Just make sure which element will be used
@@ -45,7 +45,7 @@ function animateElements(elements, observer) {
         if (elementConfig.duration <= 0) {
             return elm.innerHTML = formatNumber(elementConfig.end, elementConfig);
         }
-        
+
         if ((!observer && !elementIsInView(element)) || (observer && element.intersectionRatio < 0.5)) {
             var value = elementConfig.start > elementConfig.end ? elementConfig.end : elementConfig.start;
             return elm.innerHTML = formatNumber(value, elementConfig);
@@ -70,12 +70,12 @@ function startCounter(element, config) {
         countMode = 'dec';
         incrementsPerStep *= -1;
     }
-    
+
     // Next, determine the starting value
     var currentCount = parseValue(config.start);
     // And then print it's value to the page
     element.innerHTML = formatNumber(currentCount, config);
-    
+
     // If the config 'once' is true, then set the 'duration' to 0
     if(config.once === true){
         element.setAttribute('data-purecounter-duration', 0);
@@ -83,11 +83,11 @@ function startCounter(element, config) {
 
     // Now, start counting with counterWorker using Interval method based on delay
     var counterWorker = setInterval(() => {
-        // First, determine the next value base on current value, increment value, and cound mode
+        // First, determine the next value base on current value, increment value, and count mode
         var nextNum = nextNumber(currentCount, incrementsPerStep, countMode);
         // Next, print that value to the page
         element.innerHTML = formatNumber(nextNum, config);
-        // Now set that value to the current value, becouse it's already printed
+        // Now set that value to the current value, because it's already printed
         currentCount = nextNum;
 
         // If the value is larger or less than the 'end' (base on mode), then  print the end value and stop the Interval
@@ -116,7 +116,7 @@ function parseConfig(element) {
         separatorsymbol: ','
     };
 
-    // Next, gett all 'data-precounter' attributes value. Store to array
+    // Next, get all 'data-precounter' attributes value. Store to array
     var configValues = [].filter.call(element.attributes, function(attr) {
         return /^data-purecounter-/.test(attr.name);
     });
@@ -156,7 +156,7 @@ function convertToCurrencySystem (number, config) {
     var value = number >= 1.0e+12 ? `${(number / 1.0e+12).toFixed(limit)} T` // Twelve zeros for Trillions
         : number >= 1.0e+9 ? `${(number / 1.0e+9).toFixed(limit)} B` // Nine zeros for Billions
         : number >= 1.0e+6 ? `${(number / 1.0e+6).toFixed(limit)} M`  // Six zeros for Millions
-        : number >= 1.0e+3 ? `${(number / 1.0e+12).toFixed(limit)} K` // Three zeros for Thausands
+        : number >= 1.0e+3 ? `${(number / 1.0e+12).toFixed(limit)} K` // Three zeros for Thousands
         : number.toFixed(limit); // If less than 1000, print it's value
 
     // Apply symbol before the value and return it as string
@@ -181,7 +181,7 @@ function formatNumber(number, config) {
     var strConfig = {minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals};
     // Set the number if it using currency, then convert. If doesn't, just parse it as float
     number = config.currency ? convertToCurrencySystem(number, config) : parseFloat(number);
-    
+
     // Last, apply the number separator using number as string
     return applySeparator(number.toLocaleString(undefined, strConfig), config);
 }
