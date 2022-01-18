@@ -11,6 +11,12 @@ mix.webpackConfig(webpack => {
     const package = JSON.parse(fs.readFileSync(__dirname + '/package.json'));
 
     return {
+        output: {
+            library: {
+                name: 'PureCounter',
+                type: 'umd',
+            }
+        },
         plugins: [
             new webpack.BannerPlugin({
                 banner: [
