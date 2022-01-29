@@ -103,7 +103,7 @@ separator: false [boolean]
 separatorsymbol: ',' [string]
 ```
 
-![Browser Tests By Browserstack](https://github.com/srexi/purecounterjs/blob/master/asset/browserstack-logo-600x315.png)
+![Browser Tests By Browserstack](https://github.com/srexi/purecounterjs/blob/main/asset/browserstack-logo-600x315.png)
 ## Browser Support
 - Chrome/Edge/Opera: Yes
 - Firefox: Yes
