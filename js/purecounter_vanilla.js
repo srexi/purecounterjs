@@ -11,9 +11,9 @@ function setOptions(config, baseConfig = {}){
         var val = parseValue(config[key]);
         // set the newConfig property value
         newConfig[key] = val;
-        // Exclusive for 'duration' or 'repeat' property, recheck the value
+        // Exclusive for 'duration' or 'pulse' property, recheck the value
         // If it's not a boolean, just set it to milisecond unit
-        if (key.match(/duration|repeat/)){
+        if (key.match(/duration|pulse/)){
             newConfig[key] = typeof val != 'boolean' ? val * 1000 : val;
         }
     }
@@ -57,14 +57,14 @@ function startCounter(element, config) {
         // If the value is larger or less than the 'end' (base on mode), then  print the end value and stop the Interval
         if ((currentCount >= config.end && countMode == 'inc') || (currentCount <= config.end && countMode == 'dec')) {
             element.innerHTML = formatNumber(config.end, config);
-            // If 'once' is false and 'repeat' is set
-            if(! config.once && config.repeat){
+            // If 'once' is false and 'pulse' is set
+            if(! config.once && config.pulse){
                 // First set the 'duration' to zero
                 element.setAttribute('data-purecounter-duration', 0);
-                // Next, use timeout to reset it duration back based on 'repeat' config
+                // Next, use timeout to reset it duration back based on 'pulse' config
                 setTimeout(() => {
                     element.setAttribute('data-purecounter-duration', (config.duration / 1000));
-                }, config.repeat);
+                }, config.pulse);
             }
             clearInterval(counterWorker);
         }
@@ -205,7 +205,7 @@ function PureCounter(options = {}){
         duration: 2000, 	// Count duration [milisecond]
         delay: 10, 			// Count delay [milisecond]
         once: true, 		// Counting at once or recount when scroll [boolean]
-        repeat: false, 		// Repeat count for certain time [boolean|milisecond]
+        pulse: false, 		// Pulse count for certain time [boolean|milisecond]
         decimals: 0, 		// Decimal places [unit]
         legacy: true,       // If this is true it will use the scroll event listener on browsers
         filesizing: false, 	// Is it for filesize?

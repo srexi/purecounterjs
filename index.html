@@ -10,11 +10,16 @@
 
 <body>
     <div>
-        <p>Bug Test (count 10 in 60 seconds): <span data-purecounter-end="10" data-purecounter-duration="60"
+        <p>Take it easy (count to 10 in 60 seconds): <span data-purecounter-end="10" data-purecounter-duration="60"
                 data-purecounter-once="true" class="purecounter">0</span></p>
     </div>
     <div style="margin-top:100vh;">
         <p>So close yet so far: <span data-purecounter-duration="2.5" data-purecounter-end="9000"
+                class="purecounter">0</span>
+        </p>
+    </div>
+    <div style="margin-top:100vh;">
+        <p>We can do pulsing (restart the counter after a delay): <span data-purecounter-duration="2.5" data-purecounter-end="9000" data-purecounter-pulse="5000"
                 class="purecounter">0</span>
         </p>
     </div>
@@ -42,8 +47,11 @@
     <div style="margin-top:100vh;">
         <p>Test filesizing counter with custom selector: <span data-purecounter-end="9900000" class="filesizecount">0</span></p>
     </div>
-
-    <!-- <script src="js/purecounter_vanilla.js"></script> -->
+    <div style="margin-top:100vh;">
+        <p>It's over (wait for it): <span data-purecounter-duration="2.5" data-purecounter-end="9001"
+                class="purecounter">0</span>
+        </p>
+    </div>
 
     <script src="dist/purecounter.js"></script>
     <script>
