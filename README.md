@@ -19,7 +19,7 @@ npm i --save @srexi/purecounterjs
 In your app.js import and initialized the module like normal.
 ```js
 import PureCounter from '@srexi/purecounterjs';
-const pure = new PureCounter;
+const pure = new PureCounter();
 ```
 
 ### Vanilla
@@ -35,6 +35,9 @@ If you wish to skip the modular build and NOT use npm you can use the vanilla bu
     ...
 
     <script src="https://cdn.jsdelivr.net/npm/@srexi/purecounterjs/dist/purecounter_vanilla.js"></script>
+    <script>
+        new PureCounter();
+    </script>
 </body>
 </html>
 ```
@@ -49,58 +52,69 @@ Download the [dist/purecounter_vanilla.js]() file(for the minified version) or t
 <body>
     ...
 
-    <script src="js/purecounter_vanilla.js"></script>
+    <script src="dist/purecounter_vanilla.js"></script>
+    <script>
+        new PureCounter();
+    </script>
 </body>
 </html>
 ```
 Or you can take the contents of the file and paste it into your bundle.js file.
 
 ## How to use it:
-To use it simply add the class: 'purecounter' to an element.
+### 1. Initialize PureCounter:
+```js
+new PureCounter();
+
+// Or you can customize it for override the default config.
+// Here is the default configuration for all element with class 'filesizecount'
+new PureCounter({
+    // Setting that can't' be overriden on pre-element
+    selector: '.purecounter',		// HTML query selector for spesific element
+
+    // Settings that can be overridden on per-element basis, by `data-purecounter-*` attributes:
+    start: 0, 			            // Starting number [unit]
+    end: 100, 			            // End number [unit]
+    duration: 2, 	                // The time in seconds for the animation to complete [seconds]
+    delay: 10, 			            // The delay between each iteration (the default of 10 will produce 100 fps) [miliseconds]
+    once: true, 		            // Counting at once or recount when the element in view [boolean]
+    repeat: false, 		            // Repeat count for certain time [boolean:false|seconds]
+    decimals: 0, 		            // How many decimal places to show. [unit]
+    legacy: true,                   // If this is true it will use the scroll event listener on browsers
+    filesizing: false, 	            // This will enable/disable File Size format [boolean]
+    currency: false, 	            // This will enable/disable Currency format. Use it for set the symbol too [boolean|char|string]
+    separator: false, 	            // This will enable/disable comma separator for thousands. Use it for set the symbol too [boolean|char|string]
+});
+```
+### 2. Set the element:
+**To use it simply add the class: 'purecounter' to an element.**
 ```html
-<p>I can count: <span class="purecounter"></span></p>
+<p>I can count: <span class="purecounter">0</span></p>
 ```
 **Lazy Loading Is Applied Out Of The Box**
 
-**You can configure it by adding a data-purecounter-x attribute, here's an example:**
+**You can configure it per element by adding a `data-purecounter-*` attribute, here's an example:**
 ```html
-<p>It's over (wait for it): <span data-purecounter-start="0" data-purecounter-end="9001" class="purecounter">0</span>!!!</p>
+<p>It's over (wait for it): <span data-purecounter-start="0" data-purecounter-end="9001" data-purecounter-currency="$" class="purecounter">0</span>!!!</p>
 ```
-
-**OPTIONAL:**
-```html
-<p>Yes! (even more): <span data-purecounter-start="0" data-purecounter-end="9001" data-purecounter-separator="true" data-purecounter-separatorsymbol="," class="purecounter">0</span>!!!</p>
-```
-
-**Simply replace the X in "data-purecounter-X" with any of the api methods:**
-```
-start - The number to start from (if this is more than the end method it will automatically count down).
-end - The number to end at.
-duration - The time in seconds for the animation to complete, you can use decimals like: 0.5 for half a second.
-delay - The delay between each iteration (the default of 10 will produce 100 fps)
-once - If it should only do the animation once. If this is off the number will do the animation every time the element comes into view, otherwise it will only do it the first time.
-decimals - how many decimal places to show. It will automatically format the number according to the individual users browser standards.
-legacy - Purecounter will use the very lightweight & fast intersectionListener available in most modern browsers. If this is true it will use the scroll event listener on browsers which does not support the intersection listener (RECOMMENDED: true).
-currency - This will enable International Currency System format that will short your number (e.g. Thousands become K, Million become M, etc.), also integrated with decimals configuration (only show 1 decimals by default).
-currencysymbol - This is the char or symbol or string that will be added before the number when you enable Currency System format.
-separator - This will enable comma separator for thousands.
-separatorsymbol - Allow you to customize what separator symbol, if none is specified default symbol will be comma (,).
-```
+* The end of this count will be showing `$9.0 K`.
+* Most settings can be overriden on the pre-element basis. The element configuration will only be used on that element.
 
 ## Default Values:
 **If you do not override the methods default to these values:**
 ```
 start: 0 [uint]
-end: 9001 [uint]
+end: 100 [uint]
 duration: 2 [seconds|uint]
 delay: 10 [milliseconds|uint]
 once: true [boolean]
+repeat: false [boolean:false|seconds|unit]
 decimals: 0 [uint]
 legacy: true [boolean]
-currency: false [boolean]
-currencysymbol: false [char|string]
-separator: false [boolean]
-separatorsymbol: ',' [string]
+filesizing: false [boolean]
+currency: false [boolean|char|string]
+separator: false [boolean|char|string]
+selector: '.purecounter' [query selector]
 ```
 
 ![Browser Tests By Browserstack](https://github.com/srexi/purecounterjs/blob/main/asset/browserstack-logo-600x315.png)
