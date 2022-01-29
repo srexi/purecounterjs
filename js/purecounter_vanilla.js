@@ -1,13 +1,14 @@
 /** This function is for create and merge configuration */
 function setOptions(config, baseConfig = {}){
     // Create new Config object;
-    let newConfig = {};
+    var newConfig = {};
+
     // Loop config items to set it value into newConfig
-    for(let key in config){
+    for(var key in config){
         // if baseConfig is set, only accept the baseconfig property
         if(baseConfig != {} && !baseConfig.hasOwnProperty(key)) continue;
-        // let parse the config value
-        let val = parseValue(config[key]);
+        // parse the config value
+        var val = parseValue(config[key]);
         // set the newConfig property value
         newConfig[key] = val;
         // Exclusive for 'duration' or 'repeat' property, recheck the value
@@ -16,33 +17,31 @@ function setOptions(config, baseConfig = {}){
             newConfig[key] = typeof val != 'boolean' ? val * 1000 : val;
         }
     }
-    if(baseConfig == {}) console.log(newConfig);
+
     // Finally, we can just merge the baseConfig (if any), with newConfig.
     return Object.assign({}, baseConfig, newConfig);
 }
 
 /** This is the the counter method */
 function startCounter(element, config) {
-    // Deconstruct config value and create it variable
-    let {start, end, duration, delay, once, repeat} = config;
     // First, get the increments step
-    var incrementsPerStep = (end - start) / (duration / delay);
+    var incrementsPerStep = (config.end - config.start) / (config.duration / config.delay);
     // Next, set the counter mode (Increment or Decrement)
     var countMode = 'inc';
 
     // Set mode to 'decrement' and 'increment step' to minus if start is larger than end
-    if (start > end) {
+    if (config.start > config.end) {
         countMode = 'dec';
         incrementsPerStep *= -1;
     }
 
     // Next, determine the starting value
-    var currentCount = parseValue(start);
+    var currentCount = parseValue(config.start);
     // And then print it's value to the page
     element.innerHTML = formatNumber(currentCount, config);
 
     // If the config 'once' is true, then set the 'duration' to 0
-    if(once === true){
+    if(config.once === true){
         element.setAttribute('data-purecounter-duration', 0);
     }
 
@@ -56,20 +55,20 @@ function startCounter(element, config) {
         currentCount = nextNum;
 
         // If the value is larger or less than the 'end' (base on mode), then  print the end value and stop the Interval
-        if ((currentCount >= end && countMode == 'inc') || (currentCount <= end && countMode == 'dec')) {
-            element.innerHTML = formatNumber(end, config);
+        if ((currentCount >= config.end && countMode == 'inc') || (currentCount <= config.end && countMode == 'dec')) {
+            element.innerHTML = formatNumber(config.end, config);
             // If 'once' is false and 'repeat' is set
-            if(!once && repeat){
+            if(! config.once && config.repeat){
                 // First set the 'duration' to zero
                 element.setAttribute('data-purecounter-duration', 0);
                 // Next, use timeout to reset it duration back based on 'repeat' config
                 setTimeout(() => {
-                    element.setAttribute('data-purecounter-duration', (duration / 1000));
-                }, repeat);
+                    element.setAttribute('data-purecounter-duration', (config.duration / 1000));
+                }, config.repeat);
             }
             clearInterval(counterWorker);
         }
-    }, delay);
+    }, config.delay);
 }
 
 /** This function is to get the next number */
@@ -85,34 +84,29 @@ function nextNumber(number, steps, mode = 'inc') {
 
 /** This function is to convert number into currency format */
 function convertNumber (number, config) {
-    // Deconstruct config value and create it variable
-    var {currency, filesizing} = config;
     /** Use converter if filesizing or currency is on */
-    if (filesizing || currency) {
+    if (config.filesizing || config.currency) {
         number = Math.abs(Number(number)); // Get the absolute value of number
 
         var baseNumber = 1000, // Base multiplying treshold
-            symbol = currency && typeof currency === 'string' ? currency : "", // Set the Currency Symbol (if any)
+            symbol = config.currency && typeof config.currency === 'string' ? config.currency : "", // Set the Currency Symbol (if any)
             limit = config.decimals || 1, // Set the decimal limit (default is 1)
             unit = ['', 'K', 'M', 'B', 'T'], // Number unit based exponent threshold
             value = ''; // Define value variable
 
         /** Changes base number and its unit for filesizing */
-        if (filesizing) {
+        if (config.filesizing) {
             baseNumber = 1024; // Use 1024 instead of 1000
             unit = ['bytes', 'KB', 'MB', 'GB', 'TB']; // Change to 'bytes' unit
         }		
-
-        /** Get threshold value using exponent from basenumber */
-        var threshold = e => Math.pow(baseNumber, e);
 
         /** Set value based on the threshold */
         for(var i = 4; i >= 0; i--){
             // If the exponent is 0
             if(i === 0) value = `${number.toFixed(limit)} ${unit[i]}`;
             // If the exponent is above zero
-            if(number >= threshold(i)) {
-                value = `${(number / threshold(i)).toFixed(limit)} ${unit[i]}`;
+            if(number >= getFilesizeThreshold(baseNumber, i)) {
+                value = `${(number / getFilesizeThreshold(baseNumber, i)).toFixed(limit)} ${unit[i]}`;
                 break;
             }
         }
@@ -125,18 +119,21 @@ function convertNumber (number, config) {
     }
 }
 
+/** This function will get the given base.  */
+function getFilesizeThreshold(baseNumber, index) {
+    return Math.pow(baseNumber, index);
+}
+
 /** This function is to get the last formated number */
 function applySeparator(value, config){
-    // Deconstruct config value
-    var {separator} = config;
     // If config separator is false, delete all separator
-    if (!separator) {
+    if (! config.separator) {
         return value.replace(new RegExp(/,/gi, 'gi'), '')
     }
     // Set the separator symbol.
     // If 'separator' is string, than use the separator.
     // If 'separator' is boolean value for 'true', just set it default to comma (,)
-    var symbol = typeof separator === 'string' ? separator : ',';
+    var symbol = typeof config.separator === 'string' ? config.separator : ',';
     // If config separator is true, then create separator
     return value.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
         .replace(new RegExp(/,/gi, 'gi'), symbol);
@@ -144,9 +141,9 @@ function applySeparator(value, config){
 
 /** This function is to get formated number to be printed in the page */
 function formatNumber(number, config) {
-    var {decimals} = config;
     // This is the configuration for 'toLocaleString' method
-    var strConfig = {minimumFractionDigits: decimals, maximumFractionDigits: decimals};
+    var strConfig = {minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals};
+
     // Set and convert the number base on its config.
     number = convertNumber(number, config);
 
@@ -200,6 +197,7 @@ function intersectionListenerSupported() {
         ('intersectionRatio' in window.IntersectionObserverEntry.prototype);
 }
 
+/** Initialize PureCounter */
 function PureCounter(options = {}){
     var configs = {
         start: 0, 			// Starting number [unit]
@@ -209,7 +207,7 @@ function PureCounter(options = {}){
         once: true, 		// Counting at once or recount when scroll [boolean]
         repeat: false, 		// Repeat count for certain time [boolean|milisecond]
         decimals: 0, 		// Decimal places [unit]
-        legacy: true,
+        legacy: true,       // If this is true it will use the scroll event listener on browsers
         filesizing: false, 	// Is it for filesize?
         currency: false, 	// Is it for currency? Use it for set the symbol too [boolean|char|string]
         separator: false, 	// Do you want to use thausands separator? use it for set the symbol too [boolean|char|string]
@@ -221,7 +219,9 @@ function PureCounter(options = {}){
 		/** Get all elements with class 'purecounter' */
 		var elements = document.querySelectorAll(configOptions.selector);
 		/** Return if no elements */
-		if (elements.length === 0) return;
+		if (elements.length === 0) {
+            return;
+        }
 
 		/** Run animateElements base on Intersection Support */
 		if (intersectionListenerSupported()) {
@@ -245,11 +245,11 @@ function PureCounter(options = {}){
     /** This legacy to make Purecounter use very lightweight & fast */
     function animateLegacy(elements) {
         elements.forEach(element => {
-            var {legacy} = parseConfig(element);
-            if(legacy === true && elementIsInView(element)) {
+            var config = parseConfig(element);
+            if(config.legacy === true && elementIsInView(element)) {
                 animateElements([element]);
             }
-        })
+        });
     }
 
     /** Main Element Count Animation */
@@ -257,22 +257,21 @@ function PureCounter(options = {}){
         elements.forEach(element => {
             var elm = element.target || element; // Just make sure which element will be used
             var elementConfig = parseConfig(elm); // Get config value on that element
-            // Deconstruct config value and create it variable
-            let {start, end, duration, delay} = elementConfig;
+
             // If duration is less than or equal zero, just format the 'end' value
-            if (duration <= 0) {
-                return elm.innerHTML = formatNumber(end, elementConfig);
+            if (elementConfig.duration <= 0) {
+                return elm.innerHTML = formatNumber(elementConfig.end, elementConfig);
             }
 
-            if ((!observer && !elementIsInView(element)) || (observer && element.intersectionRatio < 0.5)) {
-                var value = start > end ? end : start;
+            if ((! observer && ! elementIsInView(element)) || (observer && element.intersectionRatio < 0.5)) {
+                var value = elementConfig.start > elementConfig.end ? elementConfig.end : elementConfig.start;
                 return elm.innerHTML = formatNumber(value, elementConfig);
             }
 
             // If duration is more than 0, then start the counter
             setTimeout(() => {
                 return startCounter(elm, elementConfig);
-            }, delay);
+            }, elementConfig.delay);
         });
     }
 
@@ -280,16 +279,16 @@ function PureCounter(options = {}){
     function parseConfig(element) {
 		// First, we need to declare the base Config
 		// This config will be used if the element doesn't have config
-		let baseConfig = configOptions;
+		var baseConfig = configOptions;
 
 		// Next, get all 'data-precounter-*' attributes value. Store to array
-		let configValues = [].filter.call(element.attributes, function(attr) {
+		var configValues = [].filter.call(element.attributes, function(attr) {
 			return /^data-purecounter-/.test(attr.name);
 		});
 
 		// Now, we create element config as an object
-		let elementConfig = configValues.length != 0 ? Object.assign({}, ...configValues.map(({name, value}) => {
-			let key = name.replace('data-purecounter-', '').toLowerCase(),
+		var elementConfig = configValues.length != 0 ? Object.assign({}, ...configValues.map(({name, value}) => {
+			var key = name.replace('data-purecounter-', '').toLowerCase(),
 				val = parseValue(value);
 
 			return {[key] : val};
@@ -302,5 +301,3 @@ function PureCounter(options = {}){
     /** Run the initial function */
     registerEventListeners();
 }
-
-module.exports = PureCounter;

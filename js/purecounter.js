@@ -9,7 +9,7 @@ export default class PureCounter {
 		    once: true, 			// Counting at once or recount when scroll [boolean]
 			repeat: false, 			// Repeat count for certain time [boolean|milisecond]
 		    decimals: 0, 			// Decimal places [unit]
-		    legacy: true,
+		    legacy: true,           // If this is true it will use the scroll event listener on browsers
 			filesizing: false, 		// Is it for filesize?
 		    currency: false, 		// Is it for currency? Use it for set the symbol too [boolean|char|string]
 		    separator: false, 			// Do you want to use thausands separator? use it for set the symbol too [boolean|char|string]
@@ -25,16 +25,16 @@ export default class PureCounter {
 		this.registerEventListeners();
 	}
 
-	/** This function is for create and merge configuration */
+	/** This method is for create and merge configuration */
 	setOptions(config, baseConfig = {}){
 		// Create new Config object;
-		let newConfig = {};
+		var newConfig = {};
 		// Loop config items to set it value into newConfig
-		for(let key in config){
+		for(var key in config){
 			// if baseConfig is set, only accept the baseconfig property
-			if(baseConfig != {} && !baseConfig.hasOwnProperty(key)) continue;
-			// let parse the config value
-			let val = this.parseValue(config[key]);
+			if(baseConfig != {} && ! baseConfig.hasOwnProperty(key)) continue;
+			// var parse the config value
+			var val = this.parseValue(config[key]);
 			// set the newConfig property value
 			newConfig[key] = val;
 			// Exclusive for 'duration' or 'repeat' property, recheck the value
@@ -48,16 +48,16 @@ export default class PureCounter {
 		return Object.assign({}, baseConfig, newConfig);
 	}
 
-	/** Initial function */
+	/** Initial setup method */
 	registerEventListeners() {
 		/** Get all elements with class 'purecounter' */
-		let elements = this.elements;
+		var elements = this.elements;
 		/** Return if no elements */
 		if (elements.length === 0) return;
 
 		/** Run animateElements base on Intersection Support */
 		if (this.intersectionSupport) {
-			let intersectObserver = new IntersectionObserver(this.animateElements.bind(this), {
+			var intersectObserver = new IntersectionObserver(this.animateElements.bind(this), {
 				"root": null,
 				"rootMargin": '20px',
 				"threshold": 0.5
@@ -77,8 +77,8 @@ export default class PureCounter {
 	/** This legacy to make Purecounter use very lightweight & fast */
 	animateLegacy(elements) {
 		elements.forEach(element => {
-			let {legacy} = this.parseConfig(element);
-			if(legacy === true && this.elementIsInView(element)) {
+			var config = this.parseConfig(element);
+			if(config.legacy === true && this.elementIsInView(element)) {
 				this.animateElements([element]);
 			}
 		})
@@ -87,54 +87,51 @@ export default class PureCounter {
 	/** Main Element Count Animation */
 	animateElements(elements, observer) {
 		elements.forEach(element => {
-			let elm = element.target || element; // Just make sure which element will be used
-			let elementConfig = this.parseConfig(elm); // Get config value on that element
-			// Deconstruct config value and create it variable
-			let {start, end, duration, delay} = elementConfig;
+			var elm = element.target || element; // Just make sure which element will be used
+			var elementConfig = this.parseConfig(elm); // Get config value on that element
+
 			// If duration is less than or equal zero, just format the 'end' value
-			if (duration <= 0) {
-				return elm.innerHTML = this.formatNumber(end, elementConfig);
+			if (elementConfig.duration <= 0) {
+				return elm.innerHTML = this.formatNumber(elementConfig.end, elementConfig);
 			}
 
-			if ((!observer && !this.elementIsInView(element)) || (observer && element.intersectionRatio < 0.5)) {
-				let value = start > end ? end : start;
+			if ((! observer && ! this.elementIsInView(element)) || (observer && element.intersectionRatio < 0.5)) {
+				var value = elementConfig.start > elementConfig.end ? elementConfig.end : elementConfig.start;
 				return elm.innerHTML = this.formatNumber(value, elementConfig);
 			}
 
 			// If duration is more than 0, then start the counter
 			setTimeout(() => {
 				return this.startCounter(elm, elementConfig);
-			}, delay);
+			}, elementConfig.delay);
 		});
 	}
 
 	/** This is the the counter method */
 	startCounter(element, config) {
-		// Deconstruct config value and create it variable
-		let {start, end, duration, delay, once, repeat} = config;
 		// First, get the increments step
-		let incrementsPerStep = (end - start) / (duration / delay);
+		var incrementsPerStep = (config.end - config.start) / (config.duration / config.delay);
 		// Next, set the counter mode (Increment or Decrement)
-		let countMode = 'inc';
+		var countMode = 'inc';
 
 		// Set mode to 'decrement' and 'increment step' to minus if start is larger than end
-		if (start > end) {
+		if (config.start > config.end) {
 			countMode = 'dec';
 			incrementsPerStep *= -1;
 		}
 
 		// Next, determine the starting value
-		let currentCount = this.parseValue(start);
+		var currentCount = this.parseValue(config.start);
 		// And then print it's value to the page
 		element.innerHTML = this.formatNumber(currentCount, config);
 
 		// If the config 'once' is true, then set the 'duration' to 0
-		if(once === true){
+		if(config.once === true){
 			element.setAttribute('data-purecounter-duration', 0);
 		}
 
 		// Now, start counting with counterWorker using Interval method based on delay
-		let counterWorker = setInterval(() => {
+		var counterWorker = setInterval(() => {
 			// First, determine the next value base on current value, increment value, and count mode
 			var nextNum = this.nextNumber(currentCount, incrementsPerStep, countMode);
 			// Next, print that value to the page
@@ -143,47 +140,43 @@ export default class PureCounter {
 			currentCount = nextNum;
 
 			// If the value is larger or less than the 'end' (base on mode), then  print the end value and stop the Interval
-			if ((currentCount >= end && countMode == 'inc') || (currentCount <= end && countMode == 'dec')) {
-				element.innerHTML = this.formatNumber(end, config);
+			if ((currentCount >= config.end && countMode == 'inc') || (currentCount <= config.end && countMode == 'dec')) {
+				element.innerHTML = this.formatNumber(config.end, config);
 				// If 'once' is false and 'repeat' is set
-				if(!once && repeat){
+				if(!config.once && config.repeat){
 					// First set the 'duration' to zero
 					element.setAttribute('data-purecounter-duration', 0);
 					// Next, use timeout to reset it duration back based on 'repeat' config
 					setTimeout(() => {
-						element.setAttribute('data-purecounter-duration', (duration / 1000));
-					}, repeat);
+						element.setAttribute('data-purecounter-duration', (config.duration / 1000));
+					}, config.repeat);
 				}
 				// Now, we can close the conterWorker peacefully
 				clearInterval(counterWorker);
 			}
-		}, delay);
+		}, config.delay);
 	}
 
-	/** This function is to generate the element Config */
+	/** This method is to generate the element Config */
 	parseConfig(element) {
-		// First, we need to declare the base Config
-		// This config will be used if the element doesn't have config
-		let baseConfig = {...this.configOptions};
-
 		// Next, get all 'data-precounter-*' attributes value. Store to array
-		let configValues = [].filter.call(element.attributes, function(attr) {
+		var configValues = [].filter.call(element.attributes, function(attr) {
 			return /^data-purecounter-/.test(attr.name);
 		});
 
 		// Now, we create element config as an object
-		let elementConfig = configValues.length != 0 ? Object.assign({}, ...configValues.map(({name, value}) => {
-			let key = name.replace('data-purecounter-', '').toLowerCase(),
+		var elementConfig = configValues.length != 0 ? Object.assign({}, ...configValues.map(({name, value}) => {
+			var key = name.replace('data-purecounter-', '').toLowerCase(),
 				val = this.parseValue(value);
 
 			return {[key] : val};
 		})) : {};
 
 		// Last setOptions and return
-		return this.setOptions(elementConfig, baseConfig);
+		return this.setOptions(elementConfig, this.configOptions);
 	}
 
-	/** This function is to get the next number */
+	/** This method is to get the next number */
 	nextNumber(number, steps, mode = 'inc') {
 		// First, get the exact value from the number and step (int or float)
 		number = this.parseValue(number);
@@ -194,36 +187,31 @@ export default class PureCounter {
 		return parseFloat(mode === 'inc' ? (number + steps) : (number - steps));
 	}
 
-	/** This function is to get the converted number */
+	/** This method is to get the converted number */
 	convertNumber (number, config) {
-		// Deconstruct config value and create it variable
-		let {currency, filesizing} = config;
 		/** Use converter if filesizing or currency is on */
-		if (filesizing || currency) {
+		if (config.filesizing || config.currency) {
 			number = Math.abs(Number(number)); // Get the absolute value of number
 
-			let baseNumber = 1000, // Base multiplying treshold
-				symbol = currency && typeof currency === 'string' ? currency : "", // Set the Currency Symbol (if any)
+			var baseNumber = 1000, // Base multiplying treshold
+				symbol = config.currency && typeof config.currency === 'string' ? config.currency : "", // Set the Currency Symbol (if any)
 				limit = config.decimals || 1, // Set the decimal limit (default is 1)
 				unit = ['', 'K', 'M', 'B', 'T'], // Number unit based exponent threshold
 				value = ''; // Define value variable
 
 			/** Changes base number and its unit for filesizing */
-			if (filesizing) {
+			if (config.filesizing) {
 				baseNumber = 1024; // Use 1024 instead of 1000
 				unit = ['bytes', 'KB', 'MB', 'GB', 'TB']; // Change to 'bytes' unit
 			}		
 
-			/** Get threshold value using exponent from basenumber */
-			const threshold = e => Math.pow(baseNumber, e);
-
 			/** Set value based on the threshold */
-			for(let i = 4; i >= 0; i--){
+			for(var i = 4; i >= 0; i--){
 				// If the exponent is 0
 				if(i === 0) value = `${number.toFixed(limit)} ${unit[i]}`;
 				// If the exponent is above zero
-				if(number >= threshold(i)) {
-					value = `${(number / threshold(i)).toFixed(limit)} ${unit[i]}`;
+				if(number >= this.getFilesizeThreshold(baseNumber, i)) {
+					value = `${(number / this.getFilesizeThreshold(baseNumber, i)).toFixed(limit)} ${unit[i]}`;
 					break;
 				}
 			}
@@ -236,28 +224,30 @@ export default class PureCounter {
 		}
 	}
 
-	/** This function is to get the last formated number */
+	/** This method will get the given base.  */
+	getFilesizeThreshold(baseNumber, index) {
+		return Math.pow(baseNumber, index);
+	}
+
+	/** This method is to get the last formated number */
 	applySeparator(value, config){
-		// Deconstruct config value
-		let {separator} = config;
 		// If config separator is false, delete all separator
-		if (!separator) {
+		if (! config.separator) {
 			return value.replace(new RegExp(/,/gi, 'gi'), '')
 		}
 		// Set the separator symbol.
 		// If 'separator' is string, than use the separator.
 		// If 'separator' is boolean value for 'true', just set it default to comma (,)
-		let symbol = typeof separator === 'string' ? separator : ',';
+		var symbol = typeof config.separator === 'string' ? config.separator : ',';
 		// If config separator is true, then create separator
 		return value.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
 			.replace(new RegExp(/,/gi, 'gi'), symbol)
 	}
 
-	/** This function is to get formated number to be printed in the page */
+	/** This method is to get formated number to be printed in the page */
 	formatNumber(number, config) {
-		let {decimals} = config;
 		// This is the configuration for 'toLocaleString' method
-		let strConfig = {minimumFractionDigits: decimals, maximumFractionDigits: decimals};
+		var strConfig = {minimumFractionDigits: config.decimals, maximumFractionDigits: config.decimals};
 		// Set and convert the number base on its config.
 		number = this.convertNumber(number, config);
 
@@ -265,7 +255,7 @@ export default class PureCounter {
 		return this.applySeparator(number.toLocaleString(undefined, strConfig), config);
 	}
 
-	/** This function is to get the parsed value */
+	/** This method is to get the parsed value */
 	parseValue(data) {
 		// If number with dot (.), will be parsed as float
 		if (/^[0-9]+\.[0-9]+$/.test(data)) {
@@ -283,7 +273,7 @@ export default class PureCounter {
 		return data;
 	}
 
-	/** This function is to detect the element is in view or not. */
+	/** This method is to detect the element is in view or not. */
 	elementIsInView(element) {
 		var top = element.offsetTop;
 		var left = element.offsetLeft;
