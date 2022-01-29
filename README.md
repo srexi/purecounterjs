@@ -1,4 +1,4 @@
-# A simple yet configurable native javascript counter which you can __count__ on.
+# A simple yet configurable native javascript counter you can __count__ on.
 **1.4kb GZIPPED Lightweight Javascript Counter**
 
 <p align="center">
