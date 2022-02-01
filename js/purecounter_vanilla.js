@@ -301,3 +301,5 @@ function PureCounter(options = {}){
     /** Run the initial function */
     registerEventListeners();
 }
+
+module.exports = PureCounter;
