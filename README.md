@@ -5,7 +5,7 @@
     <a href="https://www.npmjs.com/package/@srexi/purecounterjs"><img src="https://img.shields.io/npm/v/@srexi/purecounterjs.svg" alt="NPM"></a>
     <a href="https://npmcharts.com/compare/@srexi/purecounterjs?minimal=true"><img src="https://img.shields.io/npm/dt/@srexi/purecounterjs.svg" alt="NPM"></a>
     <a href="https://www.npmjs.com/package/@srexi/purecounterjs"><img src="https://img.shields.io/npm/l/@srexi/purecounterjs.svg" alt="NPM"></a>
-    [![](https://data.jsdelivr.com/v1/package/npm/@srexi/purecounterjs/badge)](https://www.jsdelivr.com/package/npm/@srexi/purecounterjs)
+    <a href="https://www.jsdelivr.com/package/npm/@srexi/purecounterjs"><img src="https://data.jsdelivr.com/v1/package/npm/@srexi/purecounterjs/badge" alt="jsdeliver traffic stats"></a>  
 </p>
 
 ## Demo
