@@ -1,69 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>PureCounter Example</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>PureCounter Example</title>
-</head>
+    <body>
+        <div>
+            <p>
+                Take it easy (count to 10 in 60 seconds):
+                <span
+                    data-purecounter-end="10"
+                    data-purecounter-duration="60"
+                    data-purecounter-once="true"
+                    class="purecounter"
+                    >0</span
+                >
+            </p>
+        </div>
+        <div style="margin-top: 100vh">
+            <p>
+                So close yet so far:
+                <span
+                    data-purecounter-duration="2.5"
+                    data-purecounter-end="9000"
+                    class="purecounter"
+                    >0</span
+                >
+            </p>
+        </div>
+        <div style="margin-top: 100vh">
+            <p>
+                We can do pulsing (restart the counter after a delay):
+                <span
+                    data-purecounter-duration="2.5"
+                    data-purecounter-end="9000"
+                    data-purecounter-pulse="5"
+                    class="purecounter"
+                    >0</span
+                >
+            </p>
+        </div>
+        <div style="margin-top: 100vh">
+            <p>
+                It's going backwards:
+                <span
+                    data-purecounter-duration="3"
+                    data-purecounter-start="9000"
+                    data-purecounter-end="0"
+                    data-purecounter-once="false"
+                    class="purecounter"
+                    >0</span
+                >
+            </p>
+        </div>
+        <div style="margin-top: 100vh">
+            <p>
+                With Decimals:
+                <span
+                    data-purecounter-start="0"
+                    data-purecounter-end="9000.01"
+                    data-purecounter-decimals="2"
+                    data-purecounter-once="true"
+                    class="purecounter"
+                    >0</span
+                >
+            </p>
+        </div>
 
-<body>
-    <div>
-        <p>Take it easy (count to 10 in 60 seconds): <span data-purecounter-end="10" data-purecounter-duration="60"
-                data-purecounter-once="true" class="purecounter">0</span></p>
-    </div>
-    <div style="margin-top:100vh;">
-        <p>So close yet so far: <span data-purecounter-duration="2.5" data-purecounter-end="9000"
-                class="purecounter">0</span>
-        </p>
-    </div>
-    <div style="margin-top:100vh;">
-        <p>We can do pulsing (restart the counter after a delay): <span data-purecounter-duration="2.5" data-purecounter-end="9000" data-purecounter-pulse="5000"
-                class="purecounter">0</span>
-        </p>
-    </div>
-    <div style="margin-top:100vh;">
-        <p>It's going backwards: <span data-purecounter-duration="3" data-purecounter-start="9000"
-                data-purecounter-end="0" data-purecounter-once="false" class="purecounter">0</span></p>
-    </div>
-    <div style="margin-top:100vh;">
-        <p>With Decimals: <span data-purecounter-start="0" data-purecounter-end="9000.01" data-purecounter-decimals="2"
-                data-purecounter-once="true" class="purecounter">0</span></p>
-    </div>
+        <div style="margin-top: 100vh">
+            <p>
+                Final Form with custom thousands separator:
+                <span
+                    data-purecounter-start="0"
+                    data-purecounter-end="9000000.01"
+                    data-purecounter-decimals="2"
+                    data-purecounter-separator=","
+                    data-purecounter-once="true"
+                    class="purecounter"
+                    >0</span
+                >
+            </p>
+        </div>
 
-    <div style="margin-top:100vh;">
-        <p>Final Form with custom thousands separator: <span data-purecounter-start="0"
-                data-purecounter-end="9000000.01" data-purecounter-decimals="2" data-purecounter-separator=","
-                data-purecounter-once="true" class="purecounter">0</span></p>
-    </div>
+        <div style="margin-top: 100vh">
+            <p>
+                Final Form in Currency Format with custom symbol and decimals:
+                <span
+                    data-purecounter-duration="3"
+                    data-purecounter-start="0"
+                    data-purecounter-end="9900000"
+                    data-purecounter-currency="$"
+                    data-purecounter-decimals="2"
+                    data-purecounter-once="true"
+                    class="purecounter"
+                    >0</span
+                >
+            </p>
+        </div>
 
-    <div style="margin-top:100vh;">
-        <p>Final Form in Currency Format with custom symbol and decimals: <span data-purecounter-duration="3"
-                data-purecounter-start="0" data-purecounter-end="9900000" data-purecounter-currency="$"
-                data-purecounter-decimals="2" data-purecounter-once="true" class="purecounter">0</span></p>
-    </div>
+        <div style="margin-top: 100vh">
+            <p>
+                Test filesizing counter with custom selector:
+                <span data-purecounter-end="9900000" class="filesizecount">0</span>
+            </p>
+        </div>
+        <div style="margin-top: 100vh">
+            <p>
+                It's over (wait for it):
+                <span
+                    data-purecounter-duration="2.5"
+                    data-purecounter-end="9001"
+                    class="purecounter"
+                    >0</span
+                >
+            </p>
+        </div>
 
-    <div style="margin-top:100vh;">
-        <p>Test filesizing counter with custom selector: <span data-purecounter-end="9900000" class="filesizecount">0</span></p>
-    </div>
-    <div style="margin-top:100vh;">
-        <p>It's over (wait for it): <span data-purecounter-duration="2.5" data-purecounter-end="9001"
-                class="purecounter">0</span>
-        </p>
-    </div>
+        <div style="margin-top: 100vh">
+            <p>
+                Testing formater with "de-DE":
+                <span
+                    data-purecounter-duration="2.5"
+                    data-purecounter-end="9001.01"
+                    class="purecounter"
+                    data-purecounter-formater="de-DE"
+                    data-purecounter-separator="false"
+                    data-purecounter-decimals="2"
+                    >0</span
+                >
+            </p>
+        </div>
 
-    <script src="dist/purecounter.js"></script>
-    <script>
-        // Initialize PureCounter by Default. It also can be stored on variable
-        new PureCounter();
-        // Initialize PureCounter using custom selector and custom default configuration.
-        // It also can be stored on variable
-        new PureCounter({
-            filesizing: true,
-            selector: ".filesizecount", 
-        });
-    </script>
-</body>
-
+        <script src="dist/purecounter_vanilla.js"></script>
+        <script>
+            // Initialize PureCounter by Default. It also can be stored on variable
+            new PureCounter();
+            // Initialize PureCounter using custom selector and custom default configuration.
+            // It also can be stored on variable
+            new PureCounter({
+                filesizing: true,
+                selector: ".filesizecount",
+                pulse: 2,
+            });
+        </script>
+    </body>
 </html>
