@@ -1,71 +1,71 @@
-/** This function is for create and merge configuration */
+// This function creates the configuration with default values and merges provided configuration.
 function setOptions(config, baseConfig = {}) {
-    // Create new Config object;
+    // Create a new configuration object.
     var newConfig = {};
 
-    // Loop config items to set it value into newConfig
+    // Loop config items to set it value into the configuration.
     for (var key in config) {
-        // if baseConfig is set, only accept the baseconfig property
+        // If base config is set, only accept the base config property.
         if (baseConfig != {} && !baseConfig.hasOwnProperty(key)) continue;
-        // parse the config value
+        // Parse the config value.
         var val = parseValue(config[key]);
-        // set the newConfig property value
+        // Set the new configuration property value.
         newConfig[key] = val;
-        // Exclusive for 'duration' or 'pulse' property, recheck the value
-        // If it's not a boolean, just set it to milisecond unit
+        // Exclusive for 'duration' or 'pulse' property, recheck the value.
+        // If it's not a boolean, just set it to milisecond unit.
         if (key.match(/duration|pulse/)) {
             newConfig[key] = typeof val != "boolean" ? val * 1000 : val;
         }
     }
 
-    // Finally, we can just merge the baseConfig (if any), with newConfig.
+    // Finally, we can just merge the base config (if any), with the new config.
     return Object.assign({}, baseConfig, newConfig);
 }
 
-/** This is the the counter method */
+// This is the counter method to do its job.
 function startCounter(element, config) {
-    // First, get the increments step
+    // First, get the increments step.
     var incrementsPerStep =
         (config.end - config.start) / (config.duration / config.delay);
-    // Next, set the counter mode (Increment or Decrement)
+    // Next, set the counter mode (Increment or Decrement).
     var countMode = "inc";
 
-    // Set mode to 'decrement' and 'increment step' to minus if start is larger than end
+    // Set mode to 'decrement' and 'increment step' to minus if start is larger than end.
     if (config.start > config.end) {
         countMode = "dec";
         incrementsPerStep *= -1;
     }
 
-    // Next, determine the starting value
+    // Next, determine the starting value.
     var currentCount = parseValue(config.start);
-    // And then print it's value to the page
+    // And then print its value to the page.
     element.innerHTML = formatNumber(currentCount, config);
 
-    // If the config 'once' is true, then set the 'duration' to 0
+    // If the config 'once' is true, then set the 'duration' to 0.
     if (config.once === true) {
         element.setAttribute("data-purecounter-duration", 0);
     }
 
-    // Now, start counting with counterWorker using Interval method based on delay
+    // Now start counting with counterWorker using the interval method based on delay.
     var counterWorker = setInterval(() => {
-        // First, determine the next value base on current value, increment value, and count mode
+        // First determine the next value base on current value, increment value, and count mode.
         var nextNum = nextNumber(currentCount, incrementsPerStep, countMode);
-        // Next, print that value to the page
+        // Next, print that value to the page.
         element.innerHTML = formatNumber(nextNum, config);
-        // Now set that value to the current value, because it's already printed
+        // Now set that value to the current value, because it's already printed.
         currentCount = nextNum;
 
-        // If the value is larger or less than the 'end' (base on mode), then  print the end value and stop the Interval
+        // If the value is larger or less than the 'end' (based on mode), then print the end value and stop the interval.
         if (
             (currentCount >= config.end && countMode == "inc") ||
             (currentCount <= config.end && countMode == "dec")
         ) {
             element.innerHTML = formatNumber(config.end, config);
-            // If 'pulse' is set ignore the 'once' config
+            // If 'pulse' is set ignore the 'once' config.
             if (config.pulse) {
-                // First set the 'duration' to zero
+                // First set the 'duration' to zero.
                 element.setAttribute("data-purecounter-duration", 0);
-                // Next, use timeout to reset it duration back based on 'pulse' config
+                // Next use timeout to reset it duration back based on 'pulse' config.
                 setTimeout(() => {
                     element.setAttribute(
                         "data-purecounter-duration",
@@ -78,43 +78,42 @@ function startCounter(element, config) {
     }, config.delay);
 }
 
-/** This function is to get the next number */
+// This function is to get the next number in the counting order.
 function nextNumber(number, steps, mode = "inc") {
-    // First, get the exact value from the number and step (int or float)
+    // First get the exact value from the number and step (int or float).
     number = parseValue(number);
     steps = parseValue(steps);
 
-    // Last, get the next number based on current number, increment step, and count mode
-    // Always return it as float
+    // Last get the next number based on current number, increment step, and count mode.
     return parseFloat(mode === "inc" ? number + steps : number - steps);
 }
 
-/** This function is to convert number into currency format */
+// This function is to convert number into currency format.
 function convertNumber(number, config) {
-    /** Use converter if filesizing or currency is on */
+    // Use the converter if 'filesizing' or 'currency' is on.
     if (config.filesizing || config.currency) {
-        number = Math.abs(Number(number)); // Get the absolute value of number
+        number = Math.abs(Number(number)); // Get the absolute value of number.
 
-        var baseNumber = 1000, // Base multiplying treshold
+        var baseNumber = 1000, // Base multiplying threshold.
             symbol =
                 config.currency && typeof config.currency === "string"
                     ? config.currency
-                    : "", // Set the Currency Symbol (if any)
-            limit = config.decimals || 1, // Set the decimal limit (default is 1)
-            unit = ["", "K", "M", "B", "T"], // Number unit based exponent threshold
-            value = ""; // Define value variable
+                    : "", // Set the currency symbol (if any).
+            limit = config.decimals || 1, // Set the decimal limit (default is 1).
+            unit = ["", "K", "M", "B", "T"], // Number unit based exponent threshold.
+            value = ""; 
 
-        /** Changes base number and its unit for filesizing */
+        // Changes base number and its unit for filesizing.
         if (config.filesizing) {
-            baseNumber = 1024; // Use 1024 instead of 1000
-            unit = ["bytes", "KB", "MB", "GB", "TB"]; // Change to 'bytes' unit
+            baseNumber = 1024; // Use 1024 instead of 1000.
+            unit = ["bytes", "KB", "MB", "GB", "TB"]; // Change to 'bytes' unit.
         }
 
-        /** Set value based on the threshold */
+        // Set the value based on the threshold.
         for (var i = 4; i >= 0; i--) {
-            // If the exponent is 0
+            // If the exponent is 0.
             if (i === 0) value = `${number.toFixed(limit)} ${unit[i]}`;
-            // If the exponent is above zero
+            // If the exponent is above zero.
             if (number >= getFilesizeThreshold(baseNumber, i)) {
                 value = `${(number / getFilesizeThreshold(baseNumber, i)).toFixed(
                     limit
@@ -123,42 +122,39 @@ function convertNumber(number, config) {
             }
         }
 
-        // Apply symbol before the value and return it as string
+        // Apply the symbol before the value and return it as string.
         return symbol + value;
     } else {
-        /** Return its value as float if not using filesizing or currency*/
+        // Return its value as float if not using filesizing or currency.
         return parseFloat(number);
     }
 }
 
-/** This function will get the given base.  */
+// This function will get the given filesize base.
 function getFilesizeThreshold(baseNumber, index) {
     return Math.pow(baseNumber, index);
 }
 
-/** This function is to get the last formated number */
+// This function is to get the last formated number.
 function applySeparator(value, config) {
     // Get replaced value based on it's separator/symbol.
     function replacedValue(val, separator) {
-        // Well this is my regExp for detecting the Thausands Separator
-        // I use 3 groups to determine it's separator
-        // THen the group 4 is to get the decimals value
+        // Regex to determine the seperator configuration of the number.
         var separatorRegExp =
             /^(?:(\d{1,3},(?:\d{1,3},?)*)|(\d{1,3}\.(?:\d{1,3}\.?)*)|(\d{1,3}(?:\s\d{1,3})*))([\.,]?\d{0,2}?)$/gi;
 
         return val.replace(separatorRegExp, function (match, g1, g2, g3, g4) {
-            // set initial result value
             var result = "",
                 sep = "";
             if (g1 !== undefined) {
-                // Group 1 is using comma as thausands separator, and period as decimal separator
+                // The number's format is using a comma as the thousand separator, and a period as the decimal separator.
                 result = g1.replace(new RegExp(/,/gi, "gi"), separator);
                 sep = ",";
             } else if (g2 !== undefined) {
-                // Group 2 is using period as thausands separator, and comma as decimal separator
+                // The number's format is using a period as the thousand separator, and a comma as the decimal separator.
                 result = g2.replace(new RegExp(/\./gi, "gi"), separator);
             } else if (g3 !== undefined) {
-                // Group 3 is using space as thausands separator, and comma as decimal separator
+                // The number's format is using a space as the thousand separator, and a comma as the decimal separator.
                 result = g3.replace(new RegExp(/ /gi, "gi"), separator);
             }
             if (g4 !== undefined) {
@@ -168,67 +164,67 @@ function applySeparator(value, config) {
                         ? g4.replace(new RegExp(/\.|,/gi, "gi"), decimal)
                         : "";
             }
-            // Returning result value;
+            
             return result;
         });
     }
-    // If config formater is not false, then apply separator
+    
+    // If the config formater is not false, then apply the separator.
     if (config.formater) {
-        // Now get the separator symbol
-        var symbol = config.separator // if config separator is setted
-            ? typeof config.separator === "string" // Check the type of value
-                ? config.separator // If it's type is string, then apply it's value
-                : "," // If it's not string (boolean), then apply comma as default separator
+        // Now get the separator symbol.
+        var symbol = config.separator // If config separator is set.
+            ? typeof config.separator === "string"
+                ? config.separator // If its type is a string, then apply its value.
+                : "," // If it's not string (boolean), then apply comma (as a default separator).
             : "";
-        // Special exception when locale is not 'en-US' but separator value is 'true'
-        // Use it's default locale thausands separator.
+        // Special exception when locale is not 'en-US' but separator value is 'true' (use it's default locale thausands separator).
         if (config.formater !== "en-US" && config.separator === true) {
             return value;
         }
-        // Return the replaced Value based on it's symbol
+        // Return the replaced value based on its symbol.
         return replacedValue(value, symbol);
     }
-    // If config formater is false, then return it's default value
+    // If config formater is false, then return its default value.
     return value;
 }
 
-/** This function is to get formated number to be printed in the page */
+// This function is to get formated number to be printed in the page.
 function formatNumber(number, config) {
-    // This is the configuration for 'toLocaleString' method
+    // This is the configuration for the 'toLocaleString' method.
     var strConfig = {
         minimumFractionDigits: config.decimals,
         maximumFractionDigits: config.decimals,
     };
-    // Get locale from config formater
+    // Get the locale from config formater.
     var locale = typeof config.formater === "string" ? config.formater : undefined;
 
-    // Set and convert the number base on its config.
+    // Set and convert the number based on its config.
     number = convertNumber(number, config);
 
-    // Now format the number to string base on it's locale
+    // Now format the number to string based on its locale.
     number = config.formater
         ? number.toLocaleString(locale, strConfig)
         : parseInt(number).toString();
 
-    // Last, apply the number separator using number as string
+    // Apply the number separator using the number as a string.
     return applySeparator(number, config);
 }
 
-/** This function is to get the parsed value */
+// Parse the value with the correct data type.
 function parseValue(data) {
-    // If number with dot (.), will be parsed as float
+    // If the value is a number with dot (.) -> it will be parsed as a float.
     if (/^[0-9]+\.[0-9]+$/.test(data)) {
         return parseFloat(data);
     }
-    // If just number, will be parsed as integer
+    // If it's just a plain number, it will be parsed as integer.
     if (/^[0-9]+$/.test(data)) {
         return parseInt(data);
     }
-    // If it's boolean string, will be parsed as boolean
+    // If it's a boolean or a string, it will be parsed as boolean.
     if (/^true|false/i.test(data)) {
         return /^true/i.test(data);
     }
-    // Return it's value as default
+    // Just return the data, no need for ensuring the data type.
     return data;
 }
 
@@ -253,7 +249,7 @@ function elementIsInView(element) {
     );
 }
 
-/** Just some condition to check browser Intersection Support */
+// Check if the browser supports the Intersection Observer.
 function intersectionListenerSupported() {
     return (
         "IntersectionObserver" in window &&
@@ -262,7 +258,7 @@ function intersectionListenerSupported() {
     );
 }
 
-/** Initialize PureCounter */
+// Initialize PureCounter.
 function PureCounter(options = {}) {
     var configs = {
         start: 0, // Starting number [uint]
@@ -273,7 +269,7 @@ function PureCounter(options = {}) {
         pulse: false, // Pulse count for certain time [boolean|milisecond]
         decimals: 0, // Decimal places [uint]
         legacy: true, // If this is true it will use the scroll event listener on browsers
-        filesizing: false, // Is it for filesize?
+        filesizing: false, // Enable filesizing counting [boolean]
         currency: false, // Is it for currency? Use it for set the symbol too [boolean|char|string]
         separator: false, // Do you want to use thausands separator? use it for set the symbol too [boolean|char|string]
         formater: "us-US", // Number toLocaleString locale/formater, by default is "en-US" [string|boolean:false]
@@ -282,14 +278,14 @@ function PureCounter(options = {}) {
     var configOptions = setOptions(options, configs);
 
     function registerEventListeners() {
-        /** Get all elements with class 'purecounter' */
+        // Get all elements with the selector class (default: 'purecounter') 
         var elements = document.querySelectorAll(configOptions.selector);
-        /** Return if no elements */
+        // Abort if there is no found elements.
         if (elements.length === 0) {
             return;
         }
 
-        /** Run animateElements base on Intersection Support */
+        // Run animate elements based on Intersection Support 
         if (intersectionListenerSupported()) {
             var intersectObserver = new IntersectionObserver(animateElements.bind(this), {
                 root: null,
@@ -314,7 +310,7 @@ function PureCounter(options = {}) {
         }
     }
 
-    /** This legacy to make Purecounter use very lightweight & fast */
+    // Run animations for legacy browsers.
     function animateLegacy(elements) {
         elements.forEach((element) => {
             var config = parseConfig(element);
@@ -324,7 +320,7 @@ function PureCounter(options = {}) {
         });
     }
 
-    /** Main Element Count Animation */
+    // Run animations for modern browsers.
     function animateElements(elements, observer) {
         elements.forEach((element) => {
             var elm = element.target || element; // Just make sure which element will be used
@@ -353,7 +349,7 @@ function PureCounter(options = {}) {
         });
     }
 
-    /** This function is to generate the element Config */
+    // This function is to generate the element config.
     function parseConfig(element) {
         // First, we need to declare the base Config
         // This config will be used if the element doesn't have config
@@ -382,7 +378,7 @@ function PureCounter(options = {}) {
         return setOptions(elementConfig, baseConfig);
     }
 
-    /** Run the initial function */
+    // Run the initial function.
     registerEventListeners();
 }
 
