@@ -291,7 +291,7 @@ export default class PureCounter {
                     result = g2.replace(new RegExp(/\./gi, "gi"), separator);
                 } else if (g3 !== undefined) {
                     // Group 3 is using space as thausands separator, and comma as decimal separator
-                    result = g3.replace(new RegExp(/ /gi, "gi"), separator);
+                    result = g3.replace(new RegExp(/ /gi, "gi"), separator);
                 }
                 if (g4 !== undefined) {
                     var decimal = sep !== "," ? (separator !== "," ? "," : ".") : ".";
