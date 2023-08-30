@@ -155,7 +155,7 @@ function applySeparator(value, config) {
                 result = g2.replace(new RegExp(/\./gi, "gi"), separator);
             } else if (g3 !== undefined) {
                 // The number's format is using a space as the thousand separator, and a comma as the decimal separator.
-                result = g3.replace(new RegExp(/ /gi, "gi"), separator);
+                result = g3.replace(new RegExp(/ /gi, "gi"), separator);
             }
             if (g4 !== undefined) {
                 var decimal = sep !== "," ? (separator !== "," ? "," : ".") : ".";
