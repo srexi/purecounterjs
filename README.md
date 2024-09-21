@@ -21,7 +21,7 @@
 npm i --save @srexi/purecounterjs
 ```
 
-In your app.js import and initialized the module like normal.
+In your `app.js` import and initialize our module like normal.
 
 ```js
 import PureCounter from "@srexi/purecounterjs";
@@ -95,7 +95,7 @@ new PureCounter({
     decimals: 0, // How many decimal places to show. [uint]
     legacy: true, // If this is true it will use the scroll event listener on browsers
     filesizing: false, // This will enable/disable File Size format [boolean]
-    currency: false, // This will enable/disable Currency format. Use it for set the symbol too [boolean|char|string]
+    currency: false, // This will enable/disable Currency format. Use it, and then set the symbol -> [boolean|char|string]
     formater: "us-US", // Number toLocaleString locale/formater, by default is "en-US" [string|boolean:false]
     separator: false, // This will enable/disable comma separator for thousands. Use it for set the symbol too [boolean|char|string]
 });
@@ -109,7 +109,7 @@ new PureCounter({
 <p>I can count: <span class="purecounter">0</span></p>
 ```
 
-**Lazy Loading Is Applied Out Of The Box**
+**Lazy Loading is Applied Out of The Box**
 
 **You can configure it per element by adding a `data-purecounter-*` attribute, here's an example:**
 
@@ -127,7 +127,7 @@ new PureCounter({
 ```
 
 -   The end of this count will be showing `$9.0 K`.
--   Most settings can be overriden on the pre-element basis. The element configuration will only be used on that element.
+-   Most settings can be overriden on a pre-element basis. The element configuration will only be used on that element.
 
 ## Default Values:
 
@@ -156,4 +156,4 @@ selector: '.purecounter' [query selector]
 -   Firefox: Yes
 -   IE: 9+
 -   Safari: 7+
--   **MISSING A BROWSER?** _Make A Pull Request_
+~~-   **MISSING A BROWSER?** _Make A Pull Request_~~
